@@ -8,7 +8,7 @@ colors = [(0,255,255),(255,60,245),(255,45,45),(55,255,65),(245,255,50),(255,180
 
 
 #Play zone
-play_zone_W   = 10
+play_zone_W   = 20
 play_zone_H   = 20
 
 #Shapes--matrix of each shape in a 5x5 with shapes determined in matrices
@@ -110,12 +110,12 @@ colors = colors = [(0,255,255),(255,60,245),(255,45,45),(55,255,65),(245,255,50)
 
 class Shape(object):
     #standard Tetris map size.
-    rows = play_zone_W
+    play_zone_H = play_zone_W
     cols = play_zone_H
 
-    def __init__(self, cols, rows, shape):
+    def __init__(self, cols, play_zone_H, shape):
         self.x = cols
-        self.y = rows
+        self.y = play_zone_H
         self.shape  =  shape
         self.color = random.randint(1, len(colors)-1)
         self.rotation = 0 #Base orientation 
@@ -157,7 +157,7 @@ class Tetris:
         #shape collided = true
         pass
 
-    def clear_row(self): #clear rows when row is full
+    def clear_row(self): #clear play_zone_H when row is full
         pass
 
     def auto_down(self): #moves shape down a space per time automatically
@@ -176,8 +176,8 @@ class Tetris:
         pass
 
 class cube(object):
-    rows = 20
     w = 500
+    h = 500
     def __init__(self,start,dirnx=0,dirny=1,color=(255,0,0)):
         self.pos = start
         self.dirnx = 0
@@ -200,12 +200,12 @@ class cube(object):
                 elif keys[pygame.K_RIGHT]:
                     self.dirnx = 1
                     keypress = True
-        if self.pos[1] >= self.rows-1:
+        if self.pos[1] >= play_zone_H-1:
             pass
         elif keypress:
             if self.dirnx == -1 and self.pos[0] <= 0:
                 pass
-            elif self.dirnx == 1 and self.pos[0] >= self.rows-1:
+            elif self.dirnx == 1 and self.pos[0] >= play_zone_H-1:
                 pass
             else:
                 self.pos = (self.pos[0] + self.dirnx, self.pos[1])
@@ -214,52 +214,66 @@ class cube(object):
 
 
     def draw(self, surface, eyes=False):
-        dis = self.w // self.rows
-        i = self.pos[0]
+        disw = self.w // play_zone_W
+        dish = self.h // play_zone_H
+        i = self.pos[0] 
         j = self.pos[1]
     
-        pygame.draw.rect(surface, self.color, (i*dis+1,j*dis+1, dis-2, dis-2))
+        pygame.draw.rect(surface, self.color, (i*disw+1,j*dish+1, disw-2, dish-2))
 
 #def shape()
 
-def randomSnack(rows):
+def randomSquare(play_zone_H):
 
-    x = random.randrange(rows)
+    x = random.randrange(play_zone_H)
     y = 0
         
     return (x,y)
 
-def drawGrid(w, rows, surface):
-    sizeBtwn = w // rows
+def drawGrid(w, h, surface):
+    sizeBtwnW = w // play_zone_W
+    sizeBtwnH = h // play_zone_H
 
     x = 0
     y = 0
-    for l in range(rows):
-        x = x + sizeBtwn
-        y = y + sizeBtwn
-
+    for l in range(play_zone_W):
+        x = x + sizeBtwnW
         pygame.draw.line(surface, (255,255,255), (x,0),(x,w))
-        pygame.draw.line(surface, (255,255,255), (0,y),(w,y))
+
+    for l in range(play_zone_H):
+        y = y + sizeBtwnH
+        pygame.draw.line(surface, (255,255,255), (0,y),(h,y))
 
 def main():
+    currPos = 0
     width = 500
     height = 500
-    rows = 20
+    #play_zone_H = []
+    cols = []
+    marked_boxes = [[0]*play_zone_W]*play_zone_H
     run = True
-    snack = cube(randomSnack(rows), color=(0,255,0))
+    square = cube(randomSquare(play_zone_H), color=(0,255,0))
+
+    #square.append()
     clock = pygame.time.Clock()
     window = pygame.display.set_mode((width, height))
+
+    #print(len(square))
 
     while run:
         pygame.time.delay(50)
         clock.tick(10)
 
-        if not(snack.pos[1] >= snack.rows-1):
-            snack.move()
+        if not(square.pos[1] >= play_zone_H-1):
+            square.move()
+        else:
+            marked_boxes[2][1] = 1
+            print(marked_boxes)
+
 
         window.fill((0,0,0))
-        snack.draw(window)
-        drawGrid(width,rows, window)
+        square.draw(window)
+        drawGrid(width, height, window)
         pygame.display.update()
         
 main()
