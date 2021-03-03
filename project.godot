@@ -8,21 +8,31 @@
 
 config_version=4
 
-_global_script_classes=[  ]
+_global_script_classes=[ {
+"base": "Control",
+"class": "Shapes",
+"language": "GDScript",
+"path": "res://Shapes.gd"
+} ]
 _global_script_class_icons={
-
+"Shapes": ""
 }
 
 [application]
 
 config/name="Jropper"
-run/main_scene="res://Main.tscn"
+run/main_scene="res://Home.tscn"
 config/icon="res://icon.png"
+
+[autoload]
+
+Blocks="*res://Blocks.tscn"
 
 [display]
 
-window/size/width=300
-window/size/height=480
+window/size/width=600
+window/size/height=800
+window/handheld/orientation="portrait"
 
 [rendering]
 
