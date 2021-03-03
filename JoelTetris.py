@@ -1,6 +1,7 @@
 import math
 import random
 import pygame
+import numpy as np
 import tkinter as tk
 from tkinter import messagebox
 
@@ -11,6 +12,8 @@ colors = [(0,255,255),(255,60,245),(255,45,45),(55,255,65),(245,255,50),(255,180
 play_zone_W   = 20
 play_zone_H   = 20
 
+marked_boxes = [[0]*play_zone_W]*play_zone_H
+mb = np.array(marked_boxes)
 #Shapes--matrix of each shape in a 5x5 with shapes determined in matrices
 #with possible rotations of each shape
 
@@ -208,9 +211,14 @@ class cube(object):
             elif self.dirnx == 1 and self.pos[0] >= play_zone_H-1:
                 pass
             else:
+                #mb[self.pos[0]][self.pos[1]] = 0
+                #mb[[self.pos[0] + self.dirnx][self.pos[1]]] = 2
+                #print(mb)
+                print(self.pos)
                 self.pos = (self.pos[0] + self.dirnx, self.pos[1])
         else:
             self.pos = (self.pos[0], self.pos[1] + 1)
+        
 
 
     def draw(self, surface, eyes=False):
@@ -249,8 +257,7 @@ def main():
     width = 500
     height = 500
     #play_zone_H = []
-    cols = []
-    marked_boxes = [[0]*play_zone_W]*play_zone_H
+    #cols = []
     run = True
     square = cube(randomSquare(play_zone_H), color=(0,255,0))
 
@@ -267,8 +274,8 @@ def main():
         if not(square.pos[1] >= play_zone_H-1):
             square.move()
         else:
-            marked_boxes[2][1] = 1
-            print(marked_boxes)
+            pass
+            #print(mb)
 
 
         window.fill((0,0,0))
