@@ -9,8 +9,8 @@ colors = [(0,255,255),(255,60,245),(255,45,45),(55,255,65),(245,255,50),(255,180
 
 
 #Play zone
-play_zone_W   = 20
-play_zone_H   = 20
+play_zone_W   = 40
+play_zone_H   = 40
 
 marked_boxes = [[0]*play_zone_W]*play_zone_H
 mb = np.array(marked_boxes)
@@ -188,6 +188,7 @@ class cube(object):
         self.color = color
 
     def move(self):
+        mb[self.pos[1]][self.pos[0]] = 0
         keypress = False
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -203,23 +204,27 @@ class cube(object):
                 elif keys[pygame.K_RIGHT]:
                     self.dirnx = 1
                     keypress = True
-        if self.pos[1] >= play_zone_H-1:
+        if False:
             pass
         elif keypress:
             if self.dirnx == -1 and self.pos[0] <= 0:
                 pass
-            elif self.dirnx == 1 and self.pos[0] >= play_zone_H-1:
+            elif self.dirnx == 1 and self.pos[0] >= play_zone_W-1:
                 pass
             else:
-                #mb[self.pos[0]][self.pos[1]] = 0
-                #mb[[self.pos[0] + self.dirnx][self.pos[1]]] = 2
-                #print(mb)
-                print(self.pos)
                 self.pos = (self.pos[0] + self.dirnx, self.pos[1])
         else:
             self.pos = (self.pos[0], self.pos[1] + 1)
         
+        mb[self.pos[1]][self.pos[0]] = 2
 
+    def collision():
+        hit = False
+        #if self.pos[1] >= play_zone_H-1:
+         #   hit = True
+        #elif self.pos[1] + 1 == 1:
+            #hit = True
+        return()
 
     def draw(self, surface, eyes=False):
         disw = self.w // play_zone_W
@@ -231,9 +236,10 @@ class cube(object):
 
 #def shape()
 
-def randomSquare(play_zone_H):
 
-    x = random.randrange(play_zone_H)
+def randomSquare():
+
+    x = random.randrange(play_zone_W)
     y = 0
         
     return (x,y)
@@ -259,7 +265,7 @@ def main():
     #play_zone_H = []
     #cols = []
     run = True
-    square = cube(randomSquare(play_zone_H), color=(0,255,0))
+    square = cube(randomSquare(), color=(0,255,0))
 
     #square.append()
     clock = pygame.time.Clock()
