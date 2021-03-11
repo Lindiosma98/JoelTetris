@@ -5,6 +5,10 @@ import numpy as np
 import tkinter as tk
 from tkinter import messagebox
 
+width = 500
+height = 500
+rows = 20
+cols = 20
 
 #def shape():
 #def rotate():
