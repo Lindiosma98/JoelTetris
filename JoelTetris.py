@@ -13,14 +13,59 @@ square_size = 30 # Size per block
 rows = 20
 cols = 10
 
-# Color constants
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
+# margin to place around the board, just for aesthetic purposes
+margin = 50
 
-#Determines the upper left block of the play zone grid
-#for the play zone to be in the middle of the screen
-play_top_x = (width - play_width) // 2
-play_top_y = height - play_height
+# Color constants
+# [Black, White, Teal, Purple, Red, Green, Yellow]
+colors = [(0,0,0),(255,255,255),(0,255,255),(255,60,245),(255,45,45),(55,255,65),(245,255,50)]
+
+# Numpy arrays for shapes. 4x4. Column-major. 
+T = np.array([(0,1,0,0),(1,1,0,0),(0,1,0,0),(0,0,0,0)])
+O = np.array([(1,1,0,0),(1,1,0,0),(0,0,0,0),(0,0,0,0)])
+J = np.array([(0,0,1,0),(1,1,1,0),(0,0,0,0),(0,0,0,0)])
+L = np.array([(0,0,0,0),(1,1,1,0),(0,0,1,0),(0,0,0,0)])
+Z = np.array([(1,0,0,0),(1,1,0,0),(0,1,0,0),(0,0,0,0)])
+S = np.array([(0,1,0,0),(1,1,0,0),(1,0,0,0),(0,0,0,0)])
+I = np.array([(0,1,0,0),(0,1,0,0),(0,1,0,0),(0,1,0,0)])
+
+# Upper-Left Corner of Grid
+play_top_x = 450 
+play_top_y = 50
+
+class Shape:
+
+    # The minimum and maximum values a piece can have for its coordinates: (450, 50), (750, 650)
+    left_bound = 450
+    right_bound = 750
+    up_bound = 50
+    down_bound = 650
+
+    '''def __init__(self, width, height, shape, color):
+        self.x = width
+        self.y = height
+        self.shape = shape
+        self.color = color
+        self.rotation = 0 #Base orientation '''
+
+    '''def draw(window, x, y):
+        pygame.draw.rect(window, colors[2], (x, y, square_size, square_size))'''
+
+
+def draw(window, x, y):
+        pygame.draw.rect(window, colors[2], (x, y, square_size, square_size))
+
+
+# Currently, this is the function that is used to display a shape. Could be streamlined by implementing the draw method above into it. Easy fix.
+def fillSquares(window, arr, rows, cols):
+    for i in range(rows):
+        for j in range(cols):
+            #print(rows, cols)
+            if(arr[i][j] == 1):
+                pygame.draw.rect(window, colors[2], (arr[i][j] * 30 * i + 450, arr[i][j] * 30 * j + 50, square_size, square_size))
+                print(arr[i][j] * 30 * i + 450, arr[i][j] * 30 * j)
+
+            #draw(window, (arr[i][j] * 30 * i) + 450, (arr[i][j] * 30 * j))
 
 
 #squareArray = [[0]*cols]*rows
@@ -49,23 +94,19 @@ def draw_grid(window):
 
     # Draw horizontal lines
     for _ in range(rows+1):
-        pygame.draw.line(window, WHITE, [play_width, x], [2*play_width, x], 1)
-        x += square_size
+        pygame.draw.line(window, colors[1], [(width/2)+margin, y+margin], [width-margin, y+margin], 1)
+        y += square_size
+
     # Draw vertical lines
     for _ in range(cols+1):
-        pygame.draw.line(window, WHITE, [y+play_width, 0], [y+play_width, play_height], 1)
-        y += square_size
+        pygame.draw.line(window, colors[1], [width/2+x+margin, 0+margin], [width/2+x+margin, height-margin], 1)
+        x += square_size
 
         
 
 
 #puts shape into array (current plan involves active shape being marked by 2's on array)
 #def shape(<indicate what shape>):
-
-#IMPORTANT each function involved with movement 
-#need to be able to handle not 
-#running out of the sides of the game, and
-#more importantly collisions with other blocks
 
 #rotates shape
 #def rotate(<indicate direction>):
@@ -98,11 +139,17 @@ def main():
      
          
         # Clear the screen and set the screen background
-        window.fill(BLACK)
+        window.fill(colors[0])
+
+        # Store cell states (0 = no block, 1 = current block moving, 2 = block done moving)
+        stopped_pieces = create_grid(stopped_pieces)
 
         # Draw crosshatched pattern on window
         draw_grid(window)
 
+        # Demonstrating drawing a block to screen. Change "T" to another shape name to display corresponding shape
+        fillSquares(window, T, T.shape[0], T.shape[1])
+    
         pygame.display.flip()
 
         #rotate()
