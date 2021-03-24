@@ -19,8 +19,9 @@ margin = 50
 # Color constants
 # [Black, White, Teal, Purple, Red, Green, Yellow]
 colors = [(0,0,0),(255,255,255),(0,255,255),(255,60,245),(255,45,45),(55,255,65),(245,255,50)]
+bg_color = (125, 150, 175)
 
-# Numpy arrays for shapes. 4x4. Column-major. 
+# Numpy arrays for shapes. 4x4. Column-major.
 T = np.array([(0,1,0,0),(1,1,0,0),(0,1,0,0),(0,0,0,0)])
 O = np.array([(1,1,0,0),(1,1,0,0),(0,0,0,0),(0,0,0,0)])
 J = np.array([(0,0,1,0),(1,1,1,0),(0,0,0,0),(0,0,0,0)])
@@ -29,9 +30,8 @@ Z = np.array([(1,0,0,0),(1,1,0,0),(0,1,0,0),(0,0,0,0)])
 S = np.array([(0,1,0,0),(1,1,0,0),(1,0,0,0),(0,0,0,0)])
 I = np.array([(0,1,0,0),(0,1,0,0),(0,1,0,0),(0,1,0,0)])
 
-# Upper-Left Corner of Grid
-play_top_x = 450 
-play_top_y = 50
+# Index this to access one of the np arrays above. i.e. "Shapes[2]" would equal J
+Shapes = [T, O, J, L, Z, S, I]
 
 class Shape:
 
@@ -52,20 +52,19 @@ class Shape:
         pygame.draw.rect(window, colors[2], (x, y, square_size, square_size))'''
 
 
-def draw(window, x, y):
+def drawSquare(window, x, y):
         pygame.draw.rect(window, colors[2], (x, y, square_size, square_size))
 
 
-# Currently, this is the function that is used to display a shape. Could be streamlined by implementing the draw method above into it. Easy fix.
+# Currently, this is the function that is used to display a shape. Could be streamlined by implementing the drawSquare method above into it. Easy fix.
 def fillSquares(window, arr, rows, cols):
     for i in range(rows):
         for j in range(cols):
-            #print(rows, cols)
+            # only draw squares in cells populated with a 1
             if(arr[i][j] == 1):
-                pygame.draw.rect(window, colors[2], (arr[i][j] * 30 * i + 450, arr[i][j] * 30 * j + 50, square_size, square_size))
-                print(arr[i][j] * 30 * i + 450, arr[i][j] * 30 * j)
-
-            #draw(window, (arr[i][j] * 30 * i) + 450, (arr[i][j] * 30 * j))
+                # params: (window name, x coordinate, y coordinate)
+                drawSquare(window, arr[i][j] * square_size * i + 450, arr[i][j] * square_size * j + margin)
+            
 
 
 #squareArray = [[0]*cols]*rows
@@ -94,12 +93,14 @@ def draw_grid(window):
 
     # Draw horizontal lines
     for _ in range(rows+1):
-        pygame.draw.line(window, colors[1], [(width/2)+margin, y+margin], [width-margin, y+margin], 1)
+        # params: (window name, line color, [line start x, line start y], [line end x, line end y], thickness)
+        pygame.draw.line(window, colors[0], [(width/2)+margin, y+margin], [width-margin, y+margin], 1)
         y += square_size
 
     # Draw vertical lines
     for _ in range(cols+1):
-        pygame.draw.line(window, colors[1], [width/2+x+margin, 0+margin], [width/2+x+margin, height-margin], 1)
+        # params: (window name, line color, [line start x, line start y], [line end x, line end y], thickness)
+        pygame.draw.line(window, colors[0], [width/2+x+margin, 0+margin], [width/2+x+margin, height-margin], 1)
         x += square_size
 
         
@@ -139,16 +140,16 @@ def main():
      
          
         # Clear the screen and set the screen background
-        window.fill(colors[0])
+        window.fill(bg_color)
 
         # Store cell states (0 = no block, 1 = current block moving, 2 = block done moving)
         stopped_pieces = create_grid(stopped_pieces)
 
+        # Demonstrating drawing a block to screen. Change "T" to another shape name to display corresponding shape
+        fillSquares(window, Shapes[1], Shapes[1].shape[0], Shapes[1].shape[1])
+
         # Draw crosshatched pattern on window
         draw_grid(window)
-
-        # Demonstrating drawing a block to screen. Change "T" to another shape name to display corresponding shape
-        fillSquares(window, T, T.shape[0], T.shape[1])
     
         pygame.display.flip()
 
