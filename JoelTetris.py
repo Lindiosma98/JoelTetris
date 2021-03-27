@@ -104,7 +104,7 @@ def placeStartingShape(window, board):
         for j in range(shape.shape[1]):
             # only draw squares in cells populated with a 1
             if(shape[i][j] == 1):
-                board[i][j] = 1
+                board[i][j+4] = 1
 
 # Spawns new shape at the top of the board when there are no active blocks
 def spawnShape(window, board):
@@ -121,7 +121,7 @@ def spawnShape(window, board):
         for j in range(shape.shape[1]):
             # only draw squares in cells populated with a 1
             if(shape[i][j] == 1):
-                board[i][j] = 1        
+                board[i][j+4] = 1        
 
 # Fill the squares on the grid with color. Only fills cells populated with a 1
 def drawShapes(window, board):
@@ -314,9 +314,6 @@ def main():
         move(window, dirx)
         dirx = ""
 
-        # Block falls downward one unit every tick
-        fall(window, board)
-
         # Prevent any shapes that have hit the bottom of the board from moving
         freezeShapes(window, board)
 
@@ -326,14 +323,17 @@ def main():
         # Print the board state in console
         print(board)
 
-        # Draw shape to screen
-        drawShapes(window, board)
-
         # Draw frozen shapes to the screen
         drawFrozenShapes(window, board)
 
         # Spawn a new shape when all shapes are frozen
         spawnShape(window, board)
+
+        # Draw shape to screen
+        drawShapes(window, board)
+
+        # Block falls downward one unit every tick
+        fall(window, board)
 
         # Draw crosshatched pattern on window
         draw_grid(window)
