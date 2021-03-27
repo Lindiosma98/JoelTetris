@@ -24,7 +24,7 @@ colors = [(0,0,0),(255,255,255),(0,255,255),(255,60,245),(255,45,45),(55,255,65)
 bg_color = (125, 150, 175)
 shape_number = -1
 shape_color = -1
-board = np.zeros((20, 10))
+board = np.zeros((rows, cols))
 
 # Numpy arrays for shapes. 4x4. Column-major.
 T = np.array([
@@ -190,6 +190,8 @@ def freezeShapes(window, board):
                         if(board[i][j] == 1):
                             board[i][j] = 2
 
+
+
 # Draws crosshatched pattern on canvas
 def draw_grid(window):
     x, y = 0, 0
@@ -235,7 +237,7 @@ def move(window, dir):
         # Get all coordinates one cell to the left of current 1's
         for i in range(board.shape[0]):
             for j in range(board.shape[1]):
-                if(board[i][j] == 1 and j > 0):
+                if(board[i][j] == 1 and j > 0 and board[i][j-1] != 2):
                     new_coords.append(i)
                     new_coords.append(j-1)
                     new_pairs.append(list(new_coords))
@@ -245,7 +247,7 @@ def move(window, dir):
     elif(dir == "R"):
         for i in range(board.shape[0]):
             for j in range(board.shape[1]):
-                if(board[i][j] == 1 and j < 9):
+                if(board[i][j] == 1 and j < 9 and board[i][j+1] != 2):
                     new_coords.append(i)
                     new_coords.append(j+1)
                     new_pairs.append(list(new_coords))
