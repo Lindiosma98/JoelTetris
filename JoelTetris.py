@@ -220,6 +220,13 @@ def draw_grid(window):
         pygame.draw.line(window, colors[0], [width/2+x+margin, 0+margin], [width/2+x+margin, height-margin], 1)
         x += square_size
 
+def checkGameState():
+    rows, cols = board.shape[0], board.shape[1] 
+    for i in range(cols):
+        if board[1][i] == 2:
+            return True
+    return False
+
 # Moves pieces left and right
 def move(window, dir):
     # simple list of shape coordinate values (aka where the 1's are in the board)
@@ -303,7 +310,7 @@ def main():
     # Game loop
     while not game_over:
         # Changes block movement speed
-        pygame.time.delay(200)
+        pygame.time.delay(10)
         # One hundred ticks per second
         clock.tick(100)
         
@@ -338,7 +345,10 @@ def main():
         # Draw frozen shapes to the screen
         drawFrozenShapes(window, board)
 
+        # Clears a full row of squares
         clearRow()
+
+        game_over = checkGameState() 
 
         # Spawn a new shape when all shapes are frozen
         spawnShape(window, board)
