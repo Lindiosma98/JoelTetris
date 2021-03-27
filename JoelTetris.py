@@ -1,6 +1,8 @@
 import math
 import random
+import time
 import pygame
+import pygame.freetype
 import numpy as np
 import tkinter as tk
 from tkinter import messagebox
@@ -20,7 +22,8 @@ margin = 50
 # [Black, White, Teal, Purple, Red, Green, Yellow]
 colors = [(0,0,0),(255,255,255),(0,255,255),(255,60,245),(255,45,45),(55,255,65),(245,255,50)]
 bg_color = (125, 150, 175)
-
+shape_number = -1
+shape_color = -1
 board = np.zeros((20, 10))
 
 # Numpy arrays for shapes. 4x4. Column-major.
@@ -70,34 +73,123 @@ I = np.array([
 # Index this to access one of the np arrays above. i.e. "Shapes[2]" would equal J
 Shapes = [T, O, J, L, Z, S, I]
 
+def generateShapeIndex():
+    shape_number = random.randrange(0,7)
+    if(shape_number == 0):
+        shape_color = colors[0]
+    elif(shape_number == 1):
+        shape_color = colors[1]
+    elif(shape_number == 2):
+        shape_color = colors[2]
+    elif(shape_number == 3):
+        shape_color = colors[3]
+    elif(shape_number == 4):
+        shape_color = colors[4]
+    elif(shape_number == 5):
+        shape_color = colors[5]
+    elif(shape_number == 6):
+        shape_color = colors[6]
+
+    return shape_number
+
 # Places the first shape of the game. Should be randomly generated, but that can't happen until all shapes can be moved without a segfault.
 def placeStartingShape(window, board):
-    shape = Shapes[random.randrange(len(Shapes))]
+    shape_number = generateShapeIndex()
+    print(shape_number)
+    shape = Shapes[shape_number]
     #shape = Shapes[2]
+    #print(shape)
+
     for i in range(shape.shape[0]):
         for j in range(shape.shape[1]):
             # only draw squares in cells populated with a 1
             if(shape[i][j] == 1):
                 board[i][j] = 1
 
+# Spawns new shape at the top of the board when there are no active blocks
+def spawnShape(window, board):
+    active = False
+    shape_number = generateShapeIndex()
+    shape = Shapes[shape_number]
+    for i in range(board.shape[0]):
+        for j in range(board.shape[1]):
+            if(board[i][j] == 1):
+                active = True
+
+    if(active == False):
+       for i in range(shape.shape[0]):
+        for j in range(shape.shape[1]):
+            # only draw squares in cells populated with a 1
+            if(shape[i][j] == 1):
+                board[i][j] = 1        
+
 # Fill the squares on the grid with color. Only fills cells populated with a 1
 def drawShapes(window, board):
     for i in range(board.shape[0]):
         for j in range(board.shape[1]):
             if(board[i][j] == 1):
-                #print(j,i)
-                #print(j*square_size+450, i*square_size+margin)
-                pygame.draw.rect(window, colors[2], (j*square_size+450, i*square_size+margin, square_size, square_size))
+                pygame.draw.rect(window, colors[3], (j*square_size+450, i*square_size+margin, square_size, square_size))
 
-# This needs to be implemented correctly...this ain't the way.
-'''def fall(window, board):
-    for i in range(board.shape[0]-1):
-        for j in range(board.shape[1]-1):
+# Draws all frozen shapes (2) to the board
+def drawFrozenShapes(window, board):
+    for i in range(board.shape[0]):
+        for j in range(board.shape[1]):
+            if(board[i][j] == 2):
+                pygame.draw.rect(window, colors[3], (j*square_size+450, i*square_size+margin, square_size, square_size))
+
+# This function is essentially the same as move(), but does not have a direction parameter
+# Need to vary the fall speed somehow
+def fall(window, board):
+    coords = []
+    pairs = []
+
+    rows, cols = board.shape[0], board.shape[1]
+
+    for i in range(rows):
+        for j in range(cols):
             if(board[i][j] == 1):
-                board[i+1][j] = 1
-                break'''
+                coords.append(i)
+                coords.append(j)
+                pairs.append(list(coords))
+                coords.pop()
+                coords.pop()
 
-                
+    new_pairs = []
+    new_coords = []
+
+    for i in range(board.shape[0]):
+            for j in range(board.shape[1]):
+                if(board[i][j] == 1 and i < 19):
+                    new_coords.append(i+1)
+                    new_coords.append(j)
+                    new_pairs.append(list(new_coords))
+                    new_coords.pop()
+                    new_coords.pop()
+
+
+    if(len(new_pairs) == 4):
+        # for each element in new_pairs (coordinates)
+        for i in range(4):
+            # set old pairs to 0
+            board[pairs[i][0]][pairs[i][1]] = 0
+        for i in range(4):
+            # set new pairs to 1
+            board[new_pairs[i][0]][new_pairs[i][1]] = 1
+
+    new_coords.clear()
+    new_pairs.clear()
+
+# freezes a shape if it touches the bottom
+def freezeShapes(window, board):
+    rows, cols = board.shape[0], board.shape[1]    
+    for i in range(rows):
+        for j in range(cols):
+            if(board[i][j] == 1 and i == 19):
+                for i in range(rows):
+                    for j in range(cols):
+                        if(board[i][j] == 1):
+                            board[i][j] = 2
+
 # Draws crosshatched pattern on canvas
 def draw_grid(window):
     x, y = 0, 0
@@ -114,7 +206,7 @@ def draw_grid(window):
         pygame.draw.line(window, colors[0], [width/2+x+margin, 0+margin], [width/2+x+margin, height-margin], 1)
         x += square_size
 
-
+# Moves pieces left and right
 def move(window, dir):
     # simple list of shape coordinate values (aka where the 1's are in the board)
     coords = []
@@ -174,8 +266,8 @@ def move(window, dir):
         pass
 
     # Empty the coordinate lists for the next call to this function
-    pairs.clear()
-    coords.clear()
+    #pairs.clear()
+    #coords.clear()
     new_coords.clear()
     new_pairs.clear()
 
@@ -185,6 +277,7 @@ def main():
     # Initialization stuff
     window = pygame.display.set_mode((width, height))
     pygame.display.set_caption("Joel Tetris")
+    #image = pygame.image.load('joel8bit.png')
     clock = pygame.time.Clock()
     game_over = False
     random.seed()
@@ -195,6 +288,7 @@ def main():
 
     # Game loop
     while not game_over:
+        # Changes block movement speed
         pygame.time.delay(100)
         # One hundred ticks per second
         clock.tick(100)
@@ -217,8 +311,13 @@ def main():
         # Move the block in the direction dirx
         move(window, dirx)
         dirx = ""
-        #fall(window, board)
-         
+
+        # Block falls downward one unit every tick
+        fall(window, board)
+
+        # Prevent any shapes that have hit the bottom of the board from moving
+        freezeShapes(window, board)
+
         # Clear the screen and set the screen background
         window.fill(bg_color)
 
@@ -228,28 +327,17 @@ def main():
         # Draw shape to screen
         drawShapes(window, board)
 
+        # Draw frozen shapes to the screen
+        drawFrozenShapes(window, board)
+
+        # Spawn a new shape when all shapes are frozen
+        spawnShape(window, board)
+
         # Draw crosshatched pattern on window
         draw_grid(window)
-        pygame.display.flip()
-
-        #rotate()
-        #move()
-        #drop()
-        #print(sa)
-        #stopped_pieces = {} #Dictionary for pieces placed and not moving on grid in form
-                            # (x,y): 0,1,2 where 0-no block, 1-curr block moving, 2-block done moving
-        #Create grid 10x20 that has 0 throughout to show no blocks
-        #stopped_pieces keeps track of spaces of pieces that are
-        #locked into the grid by game collision rules
-        '''def create_grid(stopped_pieces = {}):
-            grid = [[0 for _ in range(10)] for _ in range(20)]
-
-            for i in range(len(grid)):
-                for j in range(len(grid[i])):
-                    if (i,j) in stopped_pieces:
-                        stopped = stopped_pieces[(i,j)]
-                        grid[i][j] = stopped
-            return grid'''       
+        
+        pygame.display.update()
+             
     pygame.quit()
 
 main()
