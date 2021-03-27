@@ -43,9 +43,9 @@ J = np.array([
     (0,0,0,0)
     ])
 L = np.array([
-    (0,0,0,0),
     (1,1,1,0),
     (0,0,1,0),
+    (0,0,0,0),
     (0,0,0,0)
     ])
 Z = np.array([
@@ -72,8 +72,8 @@ Shapes = [T, O, J, L, Z, S, I]
 
 # Places the first shape of the game. Should be randomly generated, but that can't happen until all shapes can be moved without a segfault.
 def placeStartingShape(window, board):
-    #shape = Shapes[random.randrange(len(Shapes)-1)]
-    shape = Shapes[1]
+    shape = Shapes[random.randrange(len(Shapes))]
+    #shape = Shapes[2]
     for i in range(shape.shape[0]):
         for j in range(shape.shape[1]):
             # only draw squares in cells populated with a 1
@@ -136,28 +136,48 @@ def move(window, dir):
                 coords.pop()
 
     #print(pairs)
+    new_pairs = []
+    new_coords = []
     
-    # This strategy of block movement currently only works for the O block (2x2). Segfaults otherwise.
     if(dir == "L"):
-        # Only move left if the leftmost parts of the block aren't at index 0 of the board
-        if(pairs[0][1] != 0 and pairs[2][1] != 0):
-            board[pairs[0][0]][pairs[0][1]-1] = 1
-            board[pairs[2][0]][pairs[2][1]-1] = 1
-            board[pairs[1][0]][pairs[1][1]] = 0
-            board[pairs[3][0]][pairs[3][1]] = 0
+        # Get all coordinates one cell to the left of current 1's
+        for i in range(board.shape[0]):
+            for j in range(board.shape[1]):
+                if(board[i][j] == 1 and j > 0):
+                    new_coords.append(i)
+                    new_coords.append(j-1)
+                    new_pairs.append(list(new_coords))
+                    new_coords.pop()
+                    new_coords.pop()
+
     elif(dir == "R"):
-        # Only move right if the rightmost parts of the block aren't at index 9 of the board
-        if(pairs[1][1] != 9 and pairs[3][1] != 9):
-            board[pairs[1][0]][pairs[1][1]+1] = 1
-            board[pairs[3][0]][pairs[3][1]+1] = 1
-            board[pairs[0][0]][pairs[0][1]] = 0
-            board[pairs[2][0]][pairs[2][1]] = 0
+        for i in range(board.shape[0]):
+            for j in range(board.shape[1]):
+                if(board[i][j] == 1 and j < 9):
+                    new_coords.append(i)
+                    new_coords.append(j+1)
+                    new_pairs.append(list(new_coords))
+                    new_coords.pop()
+                    new_coords.pop()
+        
+    # Prevents segfault by ensuring all coordinates in the new_pairs list are on the board
+    if(len(new_pairs) == 4):
+        # for each element in new_pairs (coordinates)
+        for i in range(4):
+            # set old pairs to 0
+            board[pairs[i][0]][pairs[i][1]] = 0
+        for i in range(4):
+            # set new pairs to 1
+            board[new_pairs[i][0]][new_pairs[i][1]] = 1
+
     elif(dir == "D"):
         pass
 
     # Empty the coordinate lists for the next call to this function
     pairs.clear()
     coords.clear()
+    new_coords.clear()
+    new_pairs.clear()
 
 
 def main():
