@@ -296,6 +296,8 @@ def move(window, dir):
 def main():
 
     # Initialization stuff
+    difficulty = 0
+    not_run = 10
     window = pygame.display.set_mode((width, height))
     pygame.display.set_caption("Joel Tetris")
     #image = pygame.image.load('joel8bit.png')
@@ -357,7 +359,11 @@ def main():
         drawShapes(window, board)
 
         # Block falls downward one unit every tick
-        fall(window, board)
+        if (not_run - difficulty == 0):
+            fall(window, board)
+            not_run = 10
+        else:
+            not_run = not_run - 1
 
         # Draw crosshatched pattern on window
         draw_grid(window)
