@@ -24,7 +24,7 @@ colors = [(0,0,0),(255,255,255),(0,255,255),(255,60,245),(255,45,45),(55,255,65)
 bg_color = (125, 150, 175)
 shape_number = -1
 shape_color = -1
-board = np.zeros((20, 10))
+board = np.zeros((rows, cols))
 
 # Numpy arrays for shapes. 4x4. Column-major.
 T = np.array([
