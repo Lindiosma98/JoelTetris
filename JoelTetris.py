@@ -135,7 +135,7 @@ def drawFrozenShapes(window, board):
     for i in range(board.shape[0]):
         for j in range(board.shape[1]):
             if(board[i][j] == 2):
-                pygame.draw.rect(window, colors[3], (j*square_size+450, i*square_size+margin, square_size, square_size))
+                pygame.draw.rect(window, colors[4], (j*square_size+450, i*square_size+margin, square_size, square_size))
 
 # This function is essentially the same as move(), but does not have a direction parameter
 # Need to vary the fall speed somehow
@@ -184,7 +184,7 @@ def freezeShapes(window, board):
     rows, cols = board.shape[0], board.shape[1]    
     for i in range(rows):
         for j in range(cols):
-            if(board[i][j] == 1 and i == 19):
+            if((board[i][j] == 1 and i == 19) or (board[i][j] == 1 and board[i+1][j] == 2)):
                 for i in range(rows):
                     for j in range(cols):
                         if(board[i][j] == 1):
