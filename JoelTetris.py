@@ -190,7 +190,19 @@ def freezeShapes(window, board):
                         if(board[i][j] == 1):
                             board[i][j] = 2
 
-
+def clearRow():
+    rowFull = True
+    rows, cols = board.shape[0], board.shape[1]    
+    for i in range(rows):
+        for j in range(cols):
+            if (board[i][j] == 0 or board[i][j] == 1):
+                rowFull = False
+        if rowFull:
+            for k in range(rows):
+                for l in range(cols):
+                    if k + 1 < i:
+                        board[i-k][l] = board[i-k-1][l]
+        rowFull = True
 
 # Draws crosshatched pattern on canvas
 def draw_grid(window):
@@ -291,7 +303,7 @@ def main():
     # Game loop
     while not game_over:
         # Changes block movement speed
-        pygame.time.delay(100)
+        pygame.time.delay(200)
         # One hundred ticks per second
         clock.tick(100)
         
@@ -324,13 +336,15 @@ def main():
         window.fill(bg_color)
 
         # Print the board state in console
-        print(board)
+        #print(board)
 
         # Draw shape to screen
         drawShapes(window, board)
 
         # Draw frozen shapes to the screen
         drawFrozenShapes(window, board)
+
+        clearRow()
 
         # Spawn a new shape when all shapes are frozen
         spawnShape(window, board)
