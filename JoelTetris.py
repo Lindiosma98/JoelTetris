@@ -14,6 +14,7 @@ play_height = 600 # Play zone
 square_size = 30 # Size per block
 rows = 20
 cols = 10
+i_counter = 0
 
 # margin to place around the board, just for aesthetic purposes
 margin = 50
@@ -76,11 +77,13 @@ Shapes = [T, O, J, L, Z, S, I]
 def rotate(board):
 
     # Create an empty 4x4 array to hold the shape grabbed from the board
-    emptyShape = np.zeros((4, 4))
+    empty_shape = np.zeros((4, 4))
 
     # lists for storing coordinates
     coords = []
     pairs = []
+    empty_columns = 0
+    empty = False
 
     # get coordinates of the 1's in the board
     for i in range(board.shape[0]):
@@ -119,29 +122,73 @@ def rotate(board):
 
     # fill in the 1's
     for i in range(4):
-        emptyShape[pairs[i][0]][pairs[i][1]] = 1
+        empty_shape[pairs[i][0]][pairs[i][1]] = 1
 
+    pairs.clear()
+
+    print("Original shape: \n" + str(empty_shape))
     # rotate the recreated shape array
-    rotated_shape = np.rot90(emptyShape)
+    rotated_shape = np.rot90(empty_shape)
+    print(rotated_shape)
 
+    empty_columns = 0
+    empty_rows = 0
+
+    for i in range(4):
+        empty = False
+        for j in range(4):
+            if(empty_shape[j][i] == 1):
+                empty = True
+        if(empty==False):
+            empty_columns+=1
+
+    '''for i in range(4):
+        empty = False
+        for j in range(4):
+            if(empty_shape[i][j] == 1):
+                empty = True
+        if(empty==False):
+            empty_rows+=1'''
+
+    print("Empty columns: " + str(empty_columns))
+    print("Empty rows: " + str(empty_rows))
+
+    '''if(empty_columns == 3 or empty_rows == 3):
+        global i_counter
+        i_counter+=1
+
+        print("i_counter: " + str(i_counter))
+        if(i_counter % 2 == 0):
+            print("should move down")'''
+
+    #print("Empty columns: " + str(emptyColumns))
     # This chunk here was me attempting to mitigate the shift created by rotation, might use this idea to some extent later
-    '''for i in range(rotated_shape.shape[0]):
+    for i in range(rotated_shape.shape[0]):
         for j in range(rotated_shape.shape[1]):
             if(rotated_shape[i][j] == 1):
-                rotated_shape[i-1][j] = 1
-                rotated_shape[i][j] = 0'''
+                '''if(i_counter % 2 == 0):
+                    rotated_shape[i+3][j] = 1
+                    rotated_shape[i][j] = 0
+                elif(i_counter % 2 == 1): 
+                    rotated_shape[i-3][j] = 1
+                    rotated_shape[i][j] = 0
+                else:'''
+                rotated_shape[i-(empty_columns)][j] = 1
+                rotated_shape[i][j] = 0
 
-    #print(rotated_shape)
+    print(rotated_shape)
+    print('\n')
+    
 
     # Draw the rotated shape back to the game board at its original position
-    for i in range(emptyShape.shape[0]):
-        for j in range(emptyShape.shape[1]):
+    for i in range(empty_shape.shape[0]):
+        for j in range(empty_shape.shape[1]):
             if(rotated_shape[i][j] == 1):
                 board[i+minimum_x][j+minimum_y] = 1
-                
+
 
 def generateShapeIndex():
-    shape_number = random.randrange(0,7)
+    shape_number = random.randrange(7)
     if(shape_number == 0):
         shape_color = colors[0]
     elif(shape_number == 1):
@@ -162,11 +209,10 @@ def generateShapeIndex():
 # Places the first shape of the game. Should be randomly generated, but that can't happen until all shapes can be moved without a segfault.
 def placeStartingShape(window, board):
     shape_number = generateShapeIndex()
-    print(shape_number)
-    shape = Shapes[shape_number]
-    #shape = Shapes[2]
-    #print(shape)
 
+    # Change this index to change shape
+    shape = Shapes[shape_number]
+    
     for i in range(shape.shape[0]):
         for j in range(shape.shape[1]):
             # only draw squares in cells populated with a 1
@@ -380,9 +426,9 @@ def main():
     # Game loop
     while not game_over:
         # Changes block movement speed
-        pygame.time.delay(50)
+        pygame.time.delay(100)
         # One hundred ticks per second
-        clock.tick(5)
+        clock.tick(10)
         
         # Event handling (user input)
         pygame.key.set_repeat(1, 10) 
