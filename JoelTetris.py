@@ -244,15 +244,15 @@ def drawFrozenShapes(window, board):
             else if(board[i][j] == 9):
                 pygame.draw.rect(window, colors[2], (j*square_size+450, i*square_size+margin, square_size, square_size))
             else if(board[i][j] == 10):
-                pygame.draw.rect(window, colors[2], (j*square_size+450, i*square_size+margin, square_size, square_size))
+                pygame.draw.rect(window, colors[3], (j*square_size+450, i*square_size+margin, square_size, square_size))
             else if(board[i][j] == 11):
-                pygame.draw.rect(window, colors[2], (j*square_size+450, i*square_size+margin, square_size, square_size))
+                pygame.draw.rect(window, colors[4], (j*square_size+450, i*square_size+margin, square_size, square_size))
             else if(board[i][j] == 12):
-                pygame.draw.rect(window, colors[2], (j*square_size+450, i*square_size+margin, square_size, square_size))
+                pygame.draw.rect(window, colors[5], (j*square_size+450, i*square_size+margin, square_size, square_size))
             else if(board[i][j] == 13):
-                pygame.draw.rect(window, colors[2], (j*square_size+450, i*square_size+margin, square_size, square_size))
+                pygame.draw.rect(window, colors[6], (j*square_size+450, i*square_size+margin, square_size, square_size))
             else if(board[i][j] == 14):
-                pygame.draw.rect(window, colors[2], (j*square_size+450, i*square_size+margin, square_size, square_size))
+                pygame.draw.rect(window, colors[7], (j*square_size+450, i*square_size+margin, square_size, square_size))
 
 # This function is essentially the same as move(), but does not have a direction parameter
 # Need to vary the fall speed somehow
@@ -301,7 +301,12 @@ def freezeShapes(window, board):
     rows, cols = board.shape[0], board.shape[1]    
     for i in range(rows):
         for j in range(cols):
-            if((board[i][j] == 1 and i == 19) or (board[i][j] == 1 and board[i+1][j] == 2)):
+            if(((board[i][j] == 0 or (board[i][j] == 1 or board[i][j] == 2 or board[i][j] == 3 or board[i][j] == 4 
+                or board[i][j] == 5 or board[i][j] == 6 or board[i][j] == 7) and i == 19) 
+                or (board[i][j] == 0 or (board[i][j] == 1 or board[i][j] == 2 or board[i][j] == 3 or board[i][j] == 4 
+                or board[i][j] == 5 or board[i][j] == 6 or board[i][j] == 7)):
+                and (board[i+1][j] == 8 or board[i+1][j] == 9 or board[i+1][j] == 10 
+                or board[i+1][j] == 11 or board[i+1][j] == 12 or board[i+1][j] == 13 or board[i+1][j] == 14)):
                 for i in range(rows):
                     for j in range(cols):
                         if(board[i][j] == 1):
@@ -324,7 +329,8 @@ def clearRow():
     rows, cols = board.shape[0], board.shape[1]    
     for i in range(rows):
         for j in range(cols):
-            if (board[i][j] == 0 or (board[i][j] == 1 or board[i][j] == 2 or board[i][j] == 3 or board[i][j] == 4 or board[i][j] == 5 or board[i][j] == 6 or board[i][j] == 7)):
+            if (board[i][j] == 0 or (board[i][j] == 1 or board[i][j] == 2 or board[i][j] == 3 
+                or board[i][j] == 4 or board[i][j] == 5 or board[i][j] == 6 or board[i][j] == 7)):
                 rowFull = False
         if rowFull:
             for k in range(rows):
@@ -370,7 +376,8 @@ def move(window, dir):
     # loop through board array, store locations of 1's (aka where the shape currently is located)
     for i in range(rows):
         for j in range(cols):
-            if (board[i][j] == 1 or board[i][j] == 2 or board[i][j] == 3 or board[i][j] == 4 or board[i][j] == 5 or board[i][j] == 6 or board[i][j] == 7):
+            if (board[i][j] == 1 or board[i][j] == 2 or board[i][j] == 3 or board[i][j] == 4 
+                or board[i][j] == 5 or board[i][j] == 6 or board[i][j] == 7):
                 coords.append(i)
                 coords.append(j)
                 pairs.append(list(coords))
@@ -385,7 +392,10 @@ def move(window, dir):
         # Get all coordinates one cell to the left of current 1's
         for i in range(board.shape[0]):
             for j in range(board.shape[1]):
-                if((board[i][j] == 1 or board[i][j] == 2 or board[i][j] == 3 or board[i][j] == 4 or board[i][j] == 5 or board[i][j] == 6 or board[i][j] == 7) and j > 0 and board[i][j-1] != 2):
+                if((board[i][j] == 1 or board[i][j] == 2 or board[i][j] == 3 or board[i][j] == 4 
+                    or board[i][j] == 5 or board[i][j] == 6 or board[i][j] == 7) and j > 0 
+                    and (board[i][j-1] != 8 or board[i][j-1] != 9 or board[i][j-1] != 10 
+                    or board[i][j-1] != 11 or board[i][j-1] != 12 or board[i][j-1] != 13 or board[i][j-1] != 14)):
                     new_coords.append(i)
                     new_coords.append(j-1)
                     new_pairs.append(list(new_coords))
@@ -395,7 +405,10 @@ def move(window, dir):
     elif(dir == "R"):
         for i in range(board.shape[0]):
             for j in range(board.shape[1]):
-                if((board[i][j] == 1 or board[i][j] == 2 or board[i][j] == 3 or board[i][j] == 4 or board[i][j] == 5 or board[i][j] == 6 or board[i][j] == 7) and j < 9 and board[i][j+1] != 2):
+                if((board[i][j] == 1 or board[i][j] == 2 or board[i][j] == 3 or board[i][j] == 4 
+                    or board[i][j] == 5 or board[i][j] == 6 or board[i][j] == 7) and j < 9 
+                    and (board[i][j+1] != 8 or board[i][j+1] != 9 or board[i][j+1] != 10 
+                    or board[i][j+1] != 11 or board[i][j+1] != 12 or board[i][j+1] != 13 or board[i][j+1] != 14)):
                     new_coords.append(i)
                     new_coords.append(j+1)
                     new_pairs.append(list(new_coords))
