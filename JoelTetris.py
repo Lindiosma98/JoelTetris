@@ -138,6 +138,18 @@ def rotate(board):
         for j in range(emptyShape.shape[1]):
             if(rotated_shape[i][j] == 1):
                 board[i+minimum_x][j+minimum_y] = 1
+            elif(rotated_shape[i][j] == 2):
+                board[i+minimum_x][j+minimum_y] = 2
+            elif(rotated_shape[i][j] == 3):
+                board[i+minimum_x][j+minimum_y] = 3
+            elif(rotated_shape[i][j] == 4):
+                board[i+minimum_x][j+minimum_y] = 4
+            elif(rotated_shape[i][j] == 5):
+                board[i+minimum_x][j+minimum_y] = 5
+            elif(rotated_shape[i][j] == 6):
+                board[i+minimum_x][j+minimum_y] = 6
+            elif(rotated_shape[i][j] == 7):
+                board[i+minimum_x][j+minimum_y] = 7
                 
 
 def generateShapeIndex():
@@ -159,12 +171,9 @@ def generateShapeIndex():
 
     return shape_number
 
-def unique
-
 # Places the first shape of the game. Should be randomly generated, but that can't happen until all shapes can be moved without a segfault.
 def placeStartingShape(window, board):
     shape_number = generateShapeIndex()
-    print(shape_number)
     shape = Shapes[shape_number]
     #shape = Shapes[2]
     #print(shape)
@@ -174,17 +183,17 @@ def placeStartingShape(window, board):
             # only draw squares in cells populated with a 1-7
             if(shape[i][j] == 1):
                 board[i][j+4] = 1
-            else if(shape[i][j] == 2):
+            elif(shape[i][j] == 2):
                 board[i][j+4] = 2
-            else if(shape[i][j] == 3):
+            elif(shape[i][j] == 3):
                 board[i][j+4] = 3
-            else if(shape[i][j] == 4):
+            elif(shape[i][j] == 4):
                 board[i][j+4] = 4
-            else if(shape[i][j] == 5):
+            elif(shape[i][j] == 5):
                 board[i][j+4] = 5
-            else if(shape[i][j] == 6):
+            elif(shape[i][j] == 6):
                 board[i][j+4] = 6
-            else if(shape[i][j] == 7):
+            elif(shape[i][j] == 7):
                 board[i][j+4] = 7
 
 # Spawns new shape at the top of the board when there are no active blocks
@@ -203,17 +212,17 @@ def spawnShape(window, board):
             # only draw squares in cells populated with 1-7
             if(shape[i][j] == 1):
                 board[i][j+4] = 1 # 8 when frozen
-            else if(shape[i][j] == 2):
+            elif(shape[i][j] == 2):
                 board[i][j+4] = 2 # 9 when frozen
-            else if(shape[i][j] == 3):
+            elif(shape[i][j] == 3):
                 board[i][j+4] = 3 # 10 when frozen
-            else if(shape[i][j] == 4):
+            elif(shape[i][j] == 4):
                 board[i][j+4] = 4 # 11 when frozen
-            else if(shape[i][j] == 5):
+            elif(shape[i][j] == 5):
                 board[i][j+4] = 5 # 12 when frozen
-            else if(shape[i][j] == 6):
+            elif(shape[i][j] == 6):
                 board[i][j+4] = 6 # 13 when frozen
-            else if(shape[i][j] == 7):
+            elif(shape[i][j] == 7):
                 board[i][j+4] = 7 # 14 when frozen
 
 # Fill the squares on the grid with color. Only fills cells populated with a 1
@@ -221,38 +230,38 @@ def drawShapes(window, board):
     for i in range(board.shape[0]):
         for j in range(board.shape[1]):
             if(board[i][j] == 1):
+                pygame.draw.rect(window, colors[0], (j*square_size+450, i*square_size+margin, square_size, square_size))
+            elif(board[i][j] == 2):
                 pygame.draw.rect(window, colors[1], (j*square_size+450, i*square_size+margin, square_size, square_size))
-            else if(board[i][j] == 2):
+            elif(board[i][j] == 3):
                 pygame.draw.rect(window, colors[2], (j*square_size+450, i*square_size+margin, square_size, square_size))
-            else if(board[i][j] == 3):
+            elif(board[i][j] == 4):
                 pygame.draw.rect(window, colors[3], (j*square_size+450, i*square_size+margin, square_size, square_size))
-            else if(board[i][j] == 4):
+            elif(board[i][j] == 5):
                 pygame.draw.rect(window, colors[4], (j*square_size+450, i*square_size+margin, square_size, square_size))
-            else if(board[i][j] == 5):
+            elif(board[i][j] == 6):
                 pygame.draw.rect(window, colors[5], (j*square_size+450, i*square_size+margin, square_size, square_size))
-            else if(board[i][j] == 6):
+            elif(board[i][j] == 7):
                 pygame.draw.rect(window, colors[6], (j*square_size+450, i*square_size+margin, square_size, square_size))
-            else if(board[i][j] == 7):
-                pygame.draw.rect(window, colors[7], (j*square_size+450, i*square_size+margin, square_size, square_size))
 
 # Draws all frozen shapes (2) to the board
 def drawFrozenShapes(window, board):
     for i in range(board.shape[0]):
         for j in range(board.shape[1]):
             if(board[i][j] == 8):
+                pygame.draw.rect(window, colors[0], (j*square_size+450, i*square_size+margin, square_size, square_size))
+            elif(board[i][j] == 9):
                 pygame.draw.rect(window, colors[1], (j*square_size+450, i*square_size+margin, square_size, square_size))
-            else if(board[i][j] == 9):
+            elif(board[i][j] == 10):
                 pygame.draw.rect(window, colors[2], (j*square_size+450, i*square_size+margin, square_size, square_size))
-            else if(board[i][j] == 10):
+            elif(board[i][j] == 11):
                 pygame.draw.rect(window, colors[3], (j*square_size+450, i*square_size+margin, square_size, square_size))
-            else if(board[i][j] == 11):
+            elif(board[i][j] == 12):
                 pygame.draw.rect(window, colors[4], (j*square_size+450, i*square_size+margin, square_size, square_size))
-            else if(board[i][j] == 12):
+            elif(board[i][j] == 13):
                 pygame.draw.rect(window, colors[5], (j*square_size+450, i*square_size+margin, square_size, square_size))
-            else if(board[i][j] == 13):
+            elif(board[i][j] == 14):
                 pygame.draw.rect(window, colors[6], (j*square_size+450, i*square_size+margin, square_size, square_size))
-            else if(board[i][j] == 14):
-                pygame.draw.rect(window, colors[7], (j*square_size+450, i*square_size+margin, square_size, square_size))
 
 # This function is essentially the same as move(), but does not have a direction parameter
 # Need to vary the fall speed somehow
@@ -264,7 +273,8 @@ def fall(window, board):
 
     for i in range(rows):
         for j in range(cols):
-            if(board[i][j] == 1):
+            if(board[i][j] == 1 or board[i][j] == 2 or board[i][j] == 3 or board[i][j] == 4 
+                or board[i][j] == 5 or board[i][j] == 6 or board[i][j] == 7):
                 coords.append(i)
                 coords.append(j)
                 pairs.append(list(coords))
@@ -276,7 +286,8 @@ def fall(window, board):
 
     for i in range(board.shape[0]):
             for j in range(board.shape[1]):
-                if(board[i][j] == 1 and i < 19):
+                if((board[i][j] == 1 or board[i][j] == 2 or board[i][j] == 3 or board[i][j] == 4 
+                or board[i][j] == 5 or board[i][j] == 6 or board[i][j] == 7) and i < 19):
                     new_coords.append(i+1)
                     new_coords.append(j)
                     new_pairs.append(list(new_coords))
@@ -304,24 +315,24 @@ def freezeShapes(window, board):
             if(((board[i][j] == 0 or (board[i][j] == 1 or board[i][j] == 2 or board[i][j] == 3 or board[i][j] == 4 
                 or board[i][j] == 5 or board[i][j] == 6 or board[i][j] == 7) and i == 19) 
                 or (board[i][j] == 0 or (board[i][j] == 1 or board[i][j] == 2 or board[i][j] == 3 or board[i][j] == 4 
-                or board[i][j] == 5 or board[i][j] == 6 or board[i][j] == 7)):
+                or board[i][j] == 5 or board[i][j] == 6 or board[i][j] == 7))
                 and (board[i+1][j] == 8 or board[i+1][j] == 9 or board[i+1][j] == 10 
-                or board[i+1][j] == 11 or board[i+1][j] == 12 or board[i+1][j] == 13 or board[i+1][j] == 14)):
+                or board[i+1][j] == 11 or board[i+1][j] == 12 or board[i+1][j] == 13 or board[i+1][j] == 14))):
                 for i in range(rows):
                     for j in range(cols):
                         if(board[i][j] == 1):
                             board[i][j] = 8
-                        else if(board[i][j] == 2):
+                        elif(board[i][j] == 2):
                             board[i][j] = 9
-                        else if(board[i][j] == 3):
+                        elif(board[i][j] == 3):
                             board[i][j] = 10
-                        else if(board[i][j] == 4):
+                        elif(board[i][j] == 4):
                             board[i][j] = 11
-                        else if(board[i][j] == 5):
+                        elif(board[i][j] == 5):
                             board[i][j] = 12
-                        else if(board[i][j] == 6):
+                        elif(board[i][j] == 6):
                             board[i][j] = 13
-                        else if(board[i][j] == 7):
+                        elif(board[i][j] == 7):
                             board[i][j] = 14
 
 def clearRow():
@@ -346,19 +357,20 @@ def draw_grid(window):
     # Draw horizontal lines
     for _ in range(rows+1):
         # params: (window name, line color, [line start x, line start y], [line end x, line end y], thickness)
-        pygame.draw.line(window, colors[0], [(width/2)+margin, y+margin], [width-margin, y+margin], 1)
+        pygame.draw.line(window, colors[0], [(width//2)+margin, y+margin], [width-margin, y+margin], 1)
         y += square_size
 
     # Draw vertical lines
     for _ in range(cols+1):
         # params: (window name, line color, [line start x, line start y], [line end x, line end y], thickness)
-        pygame.draw.line(window, colors[0], [width/2+x+margin, 0+margin], [width/2+x+margin, height-margin], 1)
+        pygame.draw.line(window, colors[0], [width//2+x+margin, 0+margin], [width//2+x+margin, height-margin], 1)
         x += square_size
 
 def checkGameState():
     rows, cols = board.shape[0], board.shape[1] 
     for i in range(cols):
-        if (board[i][j] == 8 or board[i][j] == 9 or board[i][j] == 10 or board[i][j] == 11 or board[i][j] == 12 or board[i][j] == 13 or board[i][j] == 14):
+        if (board[1][i] == 8 or board[1][i] == 9 or board[1][i] == 10 
+            or board[1][i] == 11 or board[1][i] == 12 or board[1][i] == 13 or board[1][i] == 14):
             return True
     return False
 
