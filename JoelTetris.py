@@ -73,6 +73,73 @@ I = np.array([
 # Index this to access one of the np arrays above. i.e. "Shapes[2]" would equal J
 Shapes = [T, O, J, L, Z, S, I]
 
+def rotate(board):
+
+    # Create an empty 4x4 array to hold the shape grabbed from the board
+    emptyShape = np.zeros((4, 4))
+
+    # lists for storing coordinates
+    coords = []
+    pairs = []
+
+    # get coordinates of the 1's in the board
+    for i in range(board.shape[0]):
+        for j in range(board.shape[1]):
+            if(board[i][j] == 1):
+                coords.append(i)
+                coords.append(j)
+                pairs.append(list(coords))
+                coords.pop()
+                coords.pop()
+                board[i][j] = 0
+
+    # get the x values from the coordinates
+    for i in pairs:
+        coords.append(i[0])
+
+    # get the minimum x value
+    minimum_x = min(coords)
+
+    coords.clear()
+
+    # get the y values from the coordinates
+    for i in pairs:
+        coords.append(i[1])
+
+    # get the minimum y value
+    minimum_y = min(coords)
+
+    coords.clear()
+
+    # subtract the minimum coordinate values from the shape when it's on the board
+    # this creates the original shape as it's stored in a 4x4 array
+    for i in range(len(pairs)):
+        pairs[i][0] -= minimum_x
+        pairs[i][1] -= minimum_y
+
+    # fill in the 1's
+    for i in range(4):
+        emptyShape[pairs[i][0]][pairs[i][1]] = 1
+
+    # rotate the recreated shape array
+    rotated_shape = np.rot90(emptyShape)
+
+    # This chunk here was me attempting to mitigate the shift created by rotation, might use this idea to some extent later
+    '''for i in range(rotated_shape.shape[0]):
+        for j in range(rotated_shape.shape[1]):
+            if(rotated_shape[i][j] == 1):
+                rotated_shape[i-1][j] = 1
+                rotated_shape[i][j] = 0'''
+
+    #print(rotated_shape)
+
+    # Draw the rotated shape back to the game board at its original position
+    for i in range(emptyShape.shape[0]):
+        for j in range(emptyShape.shape[1]):
+            if(rotated_shape[i][j] == 1):
+                board[i+minimum_x][j+minimum_y] = 1
+                
+
 def generateShapeIndex():
     shape_number = random.randrange(0,7)
     if(shape_number == 0):
@@ -272,7 +339,10 @@ def move(window, dir):
                     new_pairs.append(list(new_coords))
                     new_coords.pop()
                     new_coords.pop()
-        
+
+    elif(dir == "U"):
+        rotate(board)
+
     # Prevents segfault by ensuring all coordinates in the new_pairs list are on the board
     if(len(new_pairs) == 4):
         # for each element in new_pairs (coordinates)
@@ -284,7 +354,7 @@ def move(window, dir):
             board[new_pairs[i][0]][new_pairs[i][1]] = 1
 
     elif(dir == "D"):
-        pass
+        emptyShape = np.zeros((4, 4))
 
     # Empty the coordinate lists for the next call to this function
     #pairs.clear()
@@ -310,9 +380,9 @@ def main():
     # Game loop
     while not game_over:
         # Changes block movement speed
-        pygame.time.delay(10)
+        pygame.time.delay(50)
         # One hundred ticks per second
-        clock.tick(100)
+        clock.tick(5)
         
         # Event handling (user input)
         pygame.key.set_repeat(1, 10) 
@@ -328,6 +398,9 @@ def main():
                 elif keys[pygame.K_RIGHT]:
                     #print("Right")
                     dirx = "R"
+                elif keys[pygame.K_UP]:
+                    #print("Right")
+                    dirx = "U"
 
         # Move the block in the direction dirx
         move(window, dirx)
