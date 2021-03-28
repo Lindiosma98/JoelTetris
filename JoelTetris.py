@@ -20,7 +20,7 @@ margin = 50
 
 # Color constants
 # [Black, White, Teal, Purple, Red, Green, Yellow]
-colors = [(0,0,0),(255,255,255),(0,255,255),(255,60,245),(255,45,45),(55,255,65),(245,255,50)]
+colors = [(50,50,125),(255,180,195),(0,255,255),(255,60,245),(255,45,45),(55,255,65),(245,255,50)]
 bg_color = (125, 150, 175)
 shape_number = -1
 shape_color = -1
@@ -174,6 +174,7 @@ def generateShapeIndex():
 # Places the first shape of the game. Should be randomly generated, but that can't happen until all shapes can be moved without a segfault.
 def placeStartingShape(window, board):
     shape_number = generateShapeIndex()
+    print("placeshape shapenumber", shape_number)
     shape = Shapes[shape_number]
     #shape = Shapes[2]
     #print(shape)
@@ -200,10 +201,12 @@ def placeStartingShape(window, board):
 def spawnShape(window, board):
     active = False
     shape_number = generateShapeIndex()
+    print(shape_number)
     shape = Shapes[shape_number]
     for i in range(board.shape[0]):
         for j in range(board.shape[1]):
-            if(board[i][j] == 1 or board[i][j] == 2 or board[i][j] == 3 or board[i][j] == 4 or board[i][j] == 5 or board[i][j] == 6 or board[i][j] == 7):
+            if(board[i][j] == 1 or board[i][j] == 2 or board[i][j] == 3 or board[i][j] == 4 
+                or board[i][j] == 5 or board[i][j] == 6 or board[i][j] == 7):
                 active = True
 
     if(active == False):
@@ -283,11 +286,13 @@ def fall(window, board):
 
     new_pairs = []
     new_coords = []
+    curr_shape = -1
 
     for i in range(board.shape[0]):
             for j in range(board.shape[1]):
                 if((board[i][j] == 1 or board[i][j] == 2 or board[i][j] == 3 or board[i][j] == 4 
-                or board[i][j] == 5 or board[i][j] == 6 or board[i][j] == 7) and i < 19):
+                    or board[i][j] == 5 or board[i][j] == 6 or board[i][j] == 7) and i < 19):
+                    curr_shape = board[i][j]
                     new_coords.append(i+1)
                     new_coords.append(j)
                     new_pairs.append(list(new_coords))
@@ -302,8 +307,8 @@ def fall(window, board):
             board[pairs[i][0]][pairs[i][1]] = 0
         for i in range(4):
             # set new pairs to 1
-            board[new_pairs[i][0]][new_pairs[i][1]] = 1
-
+            board[new_pairs[i][0]][new_pairs[i][1]] = curr_shape #Problem lies here for colors
+    print(new_pairs)
     new_coords.clear()
     new_pairs.clear()
 
@@ -312,12 +317,12 @@ def freezeShapes(window, board):
     rows, cols = board.shape[0], board.shape[1]    
     for i in range(rows):
         for j in range(cols):
-            if(((board[i][j] == 0 or (board[i][j] == 1 or board[i][j] == 2 or board[i][j] == 3 or board[i][j] == 4 
+            if(((board[i][j] == 1 or board[i][j] == 2 or board[i][j] == 3 or board[i][j] == 4 
                 or board[i][j] == 5 or board[i][j] == 6 or board[i][j] == 7) and i == 19) 
-                or (board[i][j] == 0 or (board[i][j] == 1 or board[i][j] == 2 or board[i][j] == 3 or board[i][j] == 4 
-                or board[i][j] == 5 or board[i][j] == 6 or board[i][j] == 7))
+                or (board[i][j] == 1 or board[i][j] == 2 or board[i][j] == 3 or board[i][j] == 4 
+                or board[i][j] == 5 or board[i][j] == 6 or board[i][j] == 7)
                 and (board[i+1][j] == 8 or board[i+1][j] == 9 or board[i+1][j] == 10 
-                or board[i+1][j] == 11 or board[i+1][j] == 12 or board[i+1][j] == 13 or board[i+1][j] == 14))):
+                or board[i+1][j] == 11 or board[i+1][j] == 12 or board[i+1][j] == 13 or board[i+1][j] == 14)):
                 for i in range(rows):
                     for j in range(cols):
                         if(board[i][j] == 1):
@@ -399,7 +404,8 @@ def move(window, dir):
     #print(pairs)
     new_pairs = []
     new_coords = []
-    
+    curr_shape = -1
+
     if(dir == "L"):
         # Get all coordinates one cell to the left of current 1's
         for i in range(board.shape[0]):
@@ -408,6 +414,7 @@ def move(window, dir):
                     or board[i][j] == 5 or board[i][j] == 6 or board[i][j] == 7) and j > 0 
                     and (board[i][j-1] != 8 or board[i][j-1] != 9 or board[i][j-1] != 10 
                     or board[i][j-1] != 11 or board[i][j-1] != 12 or board[i][j-1] != 13 or board[i][j-1] != 14)):
+                    curr_shape = board[i][j]
                     new_coords.append(i)
                     new_coords.append(j-1)
                     new_pairs.append(list(new_coords))
@@ -421,6 +428,7 @@ def move(window, dir):
                     or board[i][j] == 5 or board[i][j] == 6 or board[i][j] == 7) and j < 9 
                     and (board[i][j+1] != 8 or board[i][j+1] != 9 or board[i][j+1] != 10 
                     or board[i][j+1] != 11 or board[i][j+1] != 12 or board[i][j+1] != 13 or board[i][j+1] != 14)):
+                    curr_shape = board[i][j]
                     new_coords.append(i)
                     new_coords.append(j+1)
                     new_pairs.append(list(new_coords))
@@ -438,7 +446,7 @@ def move(window, dir):
             board[pairs[i][0]][pairs[i][1]] = 0
         for i in range(4):
             # set new pairs to 1
-            board[new_pairs[i][0]][new_pairs[i][1]] = 1
+            board[new_pairs[i][0]][new_pairs[i][1]] = curr_shape
 
     elif(dir == "D"):
         emptyShape = np.zeros((4, 4))
@@ -500,7 +508,7 @@ def main():
         window.fill(bg_color)
 
         # Print the board state in console
-        #print(board)
+        print(board)
 
         # Draw frozen shapes to the screen
         drawFrozenShapes(window, board)
