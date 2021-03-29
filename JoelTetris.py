@@ -16,14 +16,13 @@ rows = 20
 cols = 10
 i_counter = 0
 
-
 # margin to place around the board, just for aesthetic purposes
 margin = 50
 
 # Color constants
 colors = [(128,0,128),(0,255,255),(0,0,255),(255,165,0),(255,0,0),(0,255,0),(255, 255, 0)]
 bg_color = (36,36,36)
-=======
+
 # [Black, White, Teal, Purple, Red, Green, Yellow]
 colors = [(50,50,125),(255,180,195),(0,255,255),(255,60,245),(255,45,45),(55,255,65),(245,255,50)]
 bg_color = (36, 36, 36)
