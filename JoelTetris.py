@@ -501,11 +501,14 @@ def move(window, dir):
         rotate(board)
 
     elif (dir == "D"):
-        # emptyShape = np.zeros((4, 4))
         for i in range(board.shape[0]):
             for j in range(board.shape[1]):
-                if (board[i][j] == 1 and j < 9 and board[i][j + 1] != 2):
-                    new_coords.append(i + 1)
+                if((board[i][j] == 1 or board[i][j] == 2 or board[i][j] == 3 or board[i][j] == 4
+                    or board[i][j] == 5 or board[i][j] == 6 or board[i][j] == 7) and j < 9
+                    and (board[i][j+1] != 8 or board[i][j+1] != 9 or board[i][j+1] != 10
+                    or board[i][j+1] != 11 or board[i][j+1] != 12 or board[i][j+1] != 13 or board[i][j+1] != 14)):
+                    curr_shape = board[i][j]
+                    new_coords.append(i+1)
                     new_coords.append(j)
                     new_pairs.append(list(new_coords))
                     new_coords.pop()
