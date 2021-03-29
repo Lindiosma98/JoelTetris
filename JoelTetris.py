@@ -94,7 +94,6 @@ def rotate(board):
                 pairs.append(list(coords))
                 coords.pop()
                 coords.pop()
-                board[i][j] = 0
 
     # get the x values from the coordinates
     for i in pairs:
@@ -129,6 +128,51 @@ def rotate(board):
     print("Original shape: \n" + str(empty_shape))
     # rotate the recreated shape array
     rotated_shape = np.rot90(empty_shape)
+
+    need_shift = False
+    for i in range(empty_shape.shape[0]):
+        for j in range(empty_shape.shape[1]):
+            if(rotated_shape[i][j] == 1):
+                if (i+minimum_x >= rows):
+                    need_shift = True
+                    minimum_x = minimum_x - 1 
+                if (i+minimum_x < 0):
+                    need_shift = True
+                    minimum_x = minimum_x + 1 
+                if (j+minimum_y >= cols):
+                    need_shift = True
+                    minimum_y = minimum_y - 1
+                if (j+minimum_y < 0):
+                    need_shift = True
+                    minimum_y = minimum_y + 1
+                if (board[i+minimum_x][j+minimum_y] == 2):
+                    return
+    
+    while (need_shift):
+        need_shift = False
+        for i in range(empty_shape.shape[0]):
+            for j in range(empty_shape.shape[1]):
+                if(rotated_shape[i][j] == 1):
+                    if (i+minimum_x >= rows):
+                        need_shift = True
+                        minimum_x = minimum_x - 1 
+                    if (i+minimum_x < 0):
+                        need_shift = True
+                        minimum_x = minimum_x + 1 
+                    if (j+minimum_y >= cols):
+                        need_shift = True
+                        minimum_y = minimum_y - 1
+                    if (j+minimum_y < 0):
+                        need_shift = True
+                        minimum_y = minimum_y + 1
+                    if (board[i+minimum_x][j+minimum_y] == 2):
+                        return
+                        
+        
+    for i in range(board.shape[0]):
+        for j in range(board.shape[1]):
+            if(board[i][j] == 1):
+                board[i][j] = 0
     #print("Rotated Shape: \n" + str(rotated_shape))
 
     empty_columns = 0
@@ -400,7 +444,7 @@ def main():
         # Changes block movement speed
         pygame.time.delay(100)
         # One hundred ticks per second
-        clock.tick(3)
+        clock.tick(10)
         
         # Event handling (user input)
         pygame.key.set_repeat(1, 10) 
