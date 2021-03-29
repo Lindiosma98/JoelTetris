@@ -20,9 +20,9 @@ i_counter = 0
 margin = 50
 
 # Color constants
-# [Black, White, Teal, Purple, Red, Green, Yellow]
-colors = [(50,50,125),(255,180,195),(0,255,255),(255,60,245),(255,45,45),(55,255,65),(245,255,50)]
-bg_color = (125, 150, 175)
+# []
+colors = [(128,0,128),(0,255,255),(0,0,255),(255,165,0),(255,0,0),(0,255,0),(255, 255, 0)]
+bg_color = (36,36,36)
 shape_number = -1
 shape_color = -1
 board = np.zeros((rows, cols))
@@ -167,7 +167,7 @@ def rotate(board):
                     if (j+minimum_y < 0):
                         need_shift = True
                         minimum_y = minimum_y + 1
-                    if (board[i+minimum_x][j+minimum_y] >= 8 and board[i+minimum_x][j+minimum_y] >= 14):
+                    if (board[i+minimum_x][j+minimum_y] >= 8 and board[i+minimum_x][j+minimum_y] <= 14):
                         return
                         
         
@@ -183,7 +183,7 @@ def rotate(board):
     for i in range(4):
         empty = False
         for j in range(4):
-            if(empty_shape[j][i] == 1):
+            if(empty_shape[j][i] >= 1 and empty_shape[j][i] <= 14):
                 empty = True
         if(empty==False):
             empty_columns+=1
@@ -192,8 +192,8 @@ def rotate(board):
     if(empty_columns != 0):
         for i in range(rotated_shape.shape[0]):
             for j in range(rotated_shape.shape[1]):
-                if(rotated_shape[i][j] == 1):
-                    rotated_shape[i-(empty_columns)][j] = 1
+                if(rotated_shape[i][j] >= 1 and rotated_shape[i][j] <= 7 or rotated_shape[i][j] >= 8 and rotated_shape[i][j] <= 14):
+                    rotated_shape[i-(empty_columns)][j] = current_color
                     rotated_shape[i][j] = 0
 
         print("Rotated and Shifted Shape: \n" + str(rotated_shape))
@@ -215,78 +215,6 @@ def rotate(board):
                 board[i+minimum_x][j+minimum_y] = 6
             elif(rotated_shape[i][j] == 7):
                 board[i+minimum_x][j+minimum_y] = 7
-                
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                
 
 def generateShapeIndex():
     shape_number = random.randrange(7)
@@ -497,13 +425,13 @@ def draw_grid(window):
     # Draw horizontal lines
     for _ in range(rows+1):
         # params: (window name, line color, [line start x, line start y], [line end x, line end y], thickness)
-        pygame.draw.line(window, colors[0], [(width//2)+margin, y+margin], [width-margin, y+margin], 1)
+        pygame.draw.line(window, (69,69,69), [(width//2)+margin, y+margin], [width-margin, y+margin], 1)
         y += square_size
 
     # Draw vertical lines
     for _ in range(cols+1):
         # params: (window name, line color, [line start x, line start y], [line end x, line end y], thickness)
-        pygame.draw.line(window, colors[0], [width//2+x+margin, 0+margin], [width//2+x+margin, height-margin], 1)
+        pygame.draw.line(window, (69,69,69), [width//2+x+margin, 0+margin], [width//2+x+margin, height-margin], 1)
         x += square_size
 
 def checkGameState():
@@ -545,10 +473,7 @@ def move(window, dir):
         # Get all coordinates one cell to the left of current 1's
         for i in range(board.shape[0]):
             for j in range(board.shape[1]):
-                if((board[i][j] == 1 or board[i][j] == 2 or board[i][j] == 3 or board[i][j] == 4 
-                    or board[i][j] == 5 or board[i][j] == 6 or board[i][j] == 7) and j > 0 
-                    and (board[i][j-1] != 8 or board[i][j-1] != 9 or board[i][j-1] != 10 
-                    or board[i][j-1] != 11 or board[i][j-1] != 12 or board[i][j-1] != 13 or board[i][j-1] != 14)):
+                if((board[i][j] >= 1 and board[i][j] <= 7) and (j-1 >= 0) and (board[i][j-1] <= 8)):
                     curr_shape = board[i][j]
                     new_coords.append(i)
                     new_coords.append(j-1)
@@ -559,10 +484,7 @@ def move(window, dir):
     elif(dir == "R"):
         for i in range(board.shape[0]):
             for j in range(board.shape[1]):
-                if((board[i][j] == 1 or board[i][j] == 2 or board[i][j] == 3 or board[i][j] == 4 
-                    or board[i][j] == 5 or board[i][j] == 6 or board[i][j] == 7) and j < 9 
-                    and (board[i][j+1] != 8 or board[i][j+1] != 9 or board[i][j+1] != 10 
-                    or board[i][j+1] != 11 or board[i][j+1] != 12 or board[i][j+1] != 13 or board[i][j+1] != 14)):
+                if((board[i][j] >= 1 and board[i][j] <= 7) and (j+1 < cols) and (board[i][j+1] <= 8)):
                     curr_shape = board[i][j]
                     new_coords.append(i)
                     new_coords.append(j+1)
@@ -616,7 +538,7 @@ def main():
         # Changes block movement speed
         pygame.time.delay(100)
         # One hundred ticks per second
-        clock.tick(10)
+        clock.tick(100)
         
         # Event handling (user input)
         pygame.key.set_repeat(1, 10) 
