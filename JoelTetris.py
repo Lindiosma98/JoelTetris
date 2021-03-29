@@ -360,6 +360,8 @@ def fall(window, board):
                     new_pairs.append(list(new_coords))
                     new_coords.pop()
                     new_coords.pop()
+                    if (i+1 >= rows or board[i+1][j] >= 8):
+                        return
 
 
     if(len(new_pairs) == 4):
