@@ -22,7 +22,7 @@ margin = 50
 # Color constants
 # [Black, White, Teal, Purple, Red, Green, Yellow]
 colors = [(50,50,125),(255,180,195),(0,255,255),(255,60,245),(255,45,45),(55,255,65),(245,255,50)]
-bg_color = (125, 150, 175)
+bg_color = (36, 36, 36)
 shape_number = -1
 shape_color = -1
 board = np.zeros((rows, cols))
@@ -215,78 +215,6 @@ def rotate(board):
                 board[i+minimum_x][j+minimum_y] = 6
             elif(rotated_shape[i][j] == 7):
                 board[i+minimum_x][j+minimum_y] = 7
-                
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                
 
 def generateShapeIndex():
     shape_number = random.randrange(7)
@@ -497,13 +425,13 @@ def draw_grid(window):
     # Draw horizontal lines
     for _ in range(rows+1):
         # params: (window name, line color, [line start x, line start y], [line end x, line end y], thickness)
-        pygame.draw.line(window, colors[0], [(width//2)+margin, y+margin], [width-margin, y+margin], 1)
+        pygame.draw.line(window, (69,69,69), [(width//2)+margin, y+margin], [width-margin, y+margin], 1)
         y += square_size
 
     # Draw vertical lines
     for _ in range(cols+1):
         # params: (window name, line color, [line start x, line start y], [line end x, line end y], thickness)
-        pygame.draw.line(window, colors[0], [width//2+x+margin, 0+margin], [width//2+x+margin, height-margin], 1)
+        pygame.draw.line(window, (69,69,69), [width//2+x+margin, 0+margin], [width//2+x+margin, height-margin], 1)
         x += square_size
 
 def checkGameState():
