@@ -21,15 +21,13 @@ i_counter = 0
 margin = 50
 
 # Color constants
-<<<<<<< HEAD
-# []
 colors = [(128,0,128),(0,255,255),(0,0,255),(255,165,0),(255,0,0),(0,255,0),(255, 255, 0)]
 bg_color = (36,36,36)
 =======
 # [Black, White, Teal, Purple, Red, Green, Yellow]
 colors = [(50,50,125),(255,180,195),(0,255,255),(255,60,245),(255,45,45),(55,255,65),(245,255,50)]
 bg_color = (36, 36, 36)
->>>>>>> 37fa490e3bfdc1ec0029010aab0b7ef8703594e5
+
 shape_number = -1
 shape_color = -1
 board = np.zeros((rows, cols))
