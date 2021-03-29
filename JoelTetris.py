@@ -224,20 +224,6 @@ def rotate(board):
 
 def generateShapeIndex():
     shape_number = random.randrange(7)
-    if(shape_number == 0):
-        shape_color = colors[0]
-    elif(shape_number == 1):
-        shape_color = colors[1]
-    elif(shape_number == 2):
-        shape_color = colors[2]
-    elif(shape_number == 3):
-        shape_color = colors[3]
-    elif(shape_number == 4):
-        shape_color = colors[4]
-    elif(shape_number == 5):
-        shape_color = colors[5]
-    elif(shape_number == 6):
-        shape_color = colors[6]
 
     return shape_number
 
@@ -318,7 +304,7 @@ def drawNextShape(window, board):
                     start_y = j
                 #print(int(shape[i][j]) - 1)
                 ns = int(shape[i][j]) - 1
-                pygame.draw.rect(window, colors[ns], ((4+j-start_y) * square_size, (10+i-start_x) * square_size+margin, square_size, square_size)) 
+                pygame.draw.rect(window, colors[ns], ((10+j-start_y) * square_size, (10+i-start_x) * square_size+margin, square_size, square_size)) 
                 #pygame.draw.rect(window, colors[ns], (j*square_size+450, i*square_size+margin, square_size, square_size))
 
 # Draws all frozen shapes (2) to the board
@@ -490,7 +476,7 @@ def move(window, dir):
         # Get all coordinates one cell to the left of current 1's
         for i in range(board.shape[0]):
             for j in range(board.shape[1]):
-                if((board[i][j] >= 1 and board[i][j] <= 7) and (j-1 >= 0) and (board[i][j-1] <= 8)):
+                if((board[i][j] >= 1 and board[i][j] <= 7) and (j-1 >= 0) and (board[i][j-1] < 8)):
                     curr_shape = board[i][j]
                     new_coords.append(i)
                     new_coords.append(j-1)
@@ -501,7 +487,7 @@ def move(window, dir):
     elif(dir == "R"):
         for i in range(board.shape[0]):
             for j in range(board.shape[1]):
-                if((board[i][j] >= 1 and board[i][j] <= 7) and (j+1 < cols) and (board[i][j+1] <= 8)):
+                if((board[i][j] >= 1 and board[i][j] <= 7) and (j+1 < cols) and (board[i][j+1] < 8)):
                     curr_shape = board[i][j]
                     new_coords.append(i)
                     new_coords.append(j+1)
@@ -558,9 +544,9 @@ def main():
     # Game loop
     while not game_over:
         # Changes block movement speed
-        pygame.time.delay(100)
+        pygame.time.delay(75)
         # One hundred ticks per second
-        clock.tick(10)
+        clock.tick(100)
         
         # Event handling (user input)
         pygame.key.set_repeat(1, 10) 
@@ -594,7 +580,7 @@ def main():
         window.fill(bg_color)
 
         # Print the board state in console
-        #print(board)
+        print(board)
 
         # Draw frozen shapes to the screen
         drawFrozenShapes(window, board)
@@ -605,14 +591,27 @@ def main():
         # Clears a full row of squares
         cleared_rows = clearRow(cleared_rows)
 
-        if cleared_rows >= 10:
-            difficulty = 100
-        elif cleared_rows >= 20:
-            difficulty = 200
-        elif cleared_rows >= 30:
-            difficulty = 400
-        elif cleared_rows >= 40:
-            difficulty = 800
+        if cleared_rows < 5:
+            difficulty = 1
+        elif cleared_rows < 10:
+            difficulty = 2
+        elif cleared_rows < 15:
+            difficulty = 3
+        elif cleared_rows < 20:
+            difficulty = 4
+        elif cleared_rows < 25:
+            difficulty = 5
+        elif cleared_rows < 30:
+            difficulty = 6
+        elif cleared_rows < 35:
+            difficulty = 7
+        elif cleared_rows < 40:
+            difficulty = 8
+        elif cleared_rows < 45:
+            difficulty = 9
+        elif cleared_rows >= 50:
+            diffculty = 10
+            
             
         # Updates score based on rows cleared
         score = updateScore((cleared_rows - temp_cleared_rows), score)
@@ -628,7 +627,7 @@ def main():
         drawNextShape(window, board)
 
         # Block falls downward one unit every tick
-        if (difficulty - not_run == 0):
+        if (difficulty - not_run >= 0):
             fall(window, board)
             not_run = 10
         else:
@@ -642,7 +641,9 @@ def main():
         
         # Draw score and score text on window
         scoreText = myfont.render(f"Score: {score}", False, (255,255,255))
+        lineText = myfont.render(f"Level: {difficulty}", False, (255,255,255))
         window.blit(scoreText, (30, 300))
+        window.blit(lineText, (30, 350))
         
         pygame.display.update()
              
