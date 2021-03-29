@@ -27,6 +27,10 @@ bg_color = (36,36,36)
 
 shape_number = -1
 shape_color = -1
+
+next_sn = -1
+next_sc = -1
+
 board = np.zeros((rows, cols))
 
 # Numpy arrays for shapes. 4x4. Column-major.
@@ -129,7 +133,7 @@ def rotate(board):
 
     pairs.clear()
 
-    print("Original shape: \n" + str(empty_shape))
+    #print("Original shape: \n" + str(empty_shape))
     # rotate the recreated shape array
     rotated_shape = np.rot90(empty_shape)
 
@@ -198,7 +202,7 @@ def rotate(board):
                     rotated_shape[i-(empty_columns)][j] = current_color
                     rotated_shape[i][j] = 0
 
-        print("Rotated and Shifted Shape: \n" + str(rotated_shape))
+        #print("Rotated and Shifted Shape: \n" + str(rotated_shape))
     
     # Draw the rotated shape back to the game board at its original position
     for i in range(empty_shape.shape[0]):
@@ -240,6 +244,7 @@ def generateShapeIndex():
 # Places the first shape of the game. Should be randomly generated, but that can't happen until all shapes can be moved without a segfault.
 def placeStartingShape(window, board):
     shape_number = generateShapeIndex()
+    next_sn = generateShapeIndex()
 
     # Change this index to change shape
     shape = Shapes[shape_number]
@@ -247,26 +252,15 @@ def placeStartingShape(window, board):
     for i in range(shape.shape[0]):
         for j in range(shape.shape[1]):
             # only draw squares in cells populated with a 1-7
-            if(shape[i][j] == 1):
-                board[i][j+4] = 1
-            elif(shape[i][j] == 2):
-                board[i][j+4] = 2
-            elif(shape[i][j] == 3):
-                board[i][j+4] = 3
-            elif(shape[i][j] == 4):
-                board[i][j+4] = 4
-            elif(shape[i][j] == 5):
-                board[i][j+4] = 5
-            elif(shape[i][j] == 6):
-                board[i][j+4] = 6
-            elif(shape[i][j] == 7):
-                board[i][j+4] = 7
+            board[i][j+4] = shape[i][j]
+            
 
 # Spawns new shape at the top of the board when there are no active blocks
 def spawnShape(window, board):
+    global next_sn
     active = False
-    shape_number = generateShapeIndex()
-    print(shape_number)
+    shape_number = next_sn
+    #print(shape_number)
     shape = Shapes[shape_number]
     for i in range(board.shape[0]):
         for j in range(board.shape[1]):
@@ -274,23 +268,24 @@ def spawnShape(window, board):
                 active = True
 
     if(active == False):
-       for i in range(shape.shape[0]):
-        for j in range(shape.shape[1]):
-            # only draw squares in cells populated with 1-7
-            if(shape[i][j] == 1):
-                board[i][j+4] = 1 # 8 when frozen
-            elif(shape[i][j] == 2):
-                board[i][j+4] = 2 # 9 when frozen
-            elif(shape[i][j] == 3):
-                board[i][j+4] = 3 # 10 when frozen
-            elif(shape[i][j] == 4):
-                board[i][j+4] = 4 # 11 when frozen
-            elif(shape[i][j] == 5):
-                board[i][j+4] = 5 # 12 when frozen
-            elif(shape[i][j] == 6):
-                board[i][j+4] = 6 # 13 when frozen
-            elif(shape[i][j] == 7):
-                board[i][j+4] = 7 # 14 when frozen
+        next_sn = generateShapeIndex()
+        for i in range(shape.shape[0]):
+            for j in range(shape.shape[1]):
+                # only draw squares in cells populated with 1-7
+                if(shape[i][j] == 1):
+                    board[i][j+4] = 1 # 8 when frozen
+                elif(shape[i][j] == 2):
+                    board[i][j+4] = 2 # 9 when frozen
+                elif(shape[i][j] == 3):
+                    board[i][j+4] = 3 # 10 when frozen
+                elif(shape[i][j] == 4):
+                    board[i][j+4] = 4 # 11 when frozen
+                elif(shape[i][j] == 5):
+                    board[i][j+4] = 5 # 12 when frozen
+                elif(shape[i][j] == 6):
+                    board[i][j+4] = 6 # 13 when frozen
+                elif(shape[i][j] == 7):
+                    board[i][j+4] = 7 # 14 when frozen
 
 # Fill the squares on the grid with color. Only fills cells populated with a 1
 def drawShapes(window, board):
@@ -310,6 +305,21 @@ def drawShapes(window, board):
                 pygame.draw.rect(window, colors[5], (j*square_size+450, i*square_size+margin, square_size, square_size))
             elif(board[i][j] == 7):
                 pygame.draw.rect(window, colors[6], (j*square_size+450, i*square_size+margin, square_size, square_size))
+
+def drawNextShape(window, board):
+    start_x = -1
+    start_y = -1
+    shape = Shapes[next_sn]
+    for i in range(shape.shape[0]):
+        for j in range(shape.shape[1]):
+            if(shape[i][j] >= 1 and shape[i][j] <= 7):
+                if(start_x == -1):
+                    start_x = i
+                    start_y = j
+                #print(int(shape[i][j]) - 1)
+                ns = int(shape[i][j]) - 1
+                pygame.draw.rect(window, colors[ns], ((4+j-start_y) * square_size, (10+i-start_x) * square_size+margin, square_size, square_size)) 
+                #pygame.draw.rect(window, colors[ns], (j*square_size+450, i*square_size+margin, square_size, square_size))
 
 # Draws all frozen shapes (2) to the board
 def drawFrozenShapes(window, board):
@@ -372,7 +382,7 @@ def fall(window, board):
         for i in range(4):
             # set new pairs to 1
             board[new_pairs[i][0]][new_pairs[i][1]] = curr_shape #Problem lies here for colors
-    print(new_pairs)
+    #print(new_pairs)
     new_coords.clear()
     new_pairs.clear()
 
@@ -584,7 +594,7 @@ def main():
         window.fill(bg_color)
 
         # Print the board state in console
-        print(board)
+        #print(board)
 
         # Draw frozen shapes to the screen
         drawFrozenShapes(window, board)
@@ -614,6 +624,8 @@ def main():
 
         # Draw shape to screen
         drawShapes(window, board)
+
+        drawNextShape(window, board)
 
         # Block falls downward one unit every tick
         if (difficulty - not_run == 0):
