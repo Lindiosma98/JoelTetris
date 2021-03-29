@@ -15,7 +15,7 @@ square_size = 30 # Size per block
 rows = 20
 cols = 10
 i_counter = 0
-cleared_rows = 0
+
 
 # margin to place around the board, just for aesthetic purposes
 margin = 50
@@ -404,7 +404,7 @@ def freezeShapes(window, board):
                         elif(board[i][j] == 7):
                             board[i][j] = 14
 
-def clearRow():
+def clearRow(cleared_rows):
     rowFull = True
     rows, cols = board.shape[0], board.shape[1]    
     for i in range(rows):
@@ -537,6 +537,7 @@ def main():
     game_over = False
     random.seed()
     dirx = ""
+    cleared_rows = 0
 
     # Place the first shape
     placeStartingShape(window, board)
@@ -586,7 +587,7 @@ def main():
         drawFrozenShapes(window, board)
 
         # Clears a full row of squares
-        clearRow()
+        clearRow(cleared_rows)
 
         if cleared_rows >= 10:
             difficulty = 100
