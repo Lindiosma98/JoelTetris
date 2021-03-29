@@ -15,6 +15,7 @@ square_size = 30 # Size per block
 rows = 20
 cols = 10
 i_counter = 0
+cleared_rows = 0
 
 # margin to place around the board, just for aesthetic purposes
 margin = 50
@@ -417,6 +418,7 @@ def clearRow():
                     if k + 1 < i:
                         board[i-k][l] = board[i-k-1][l]
         rowFull = True
+    cleared_rows = cleared_rows + 1
 
 # Draws crosshatched pattern on canvas
 def draw_grid(window):
@@ -586,6 +588,15 @@ def main():
         # Clears a full row of squares
         clearRow()
 
+        if cleared_rows >= 10:
+            difficulty = 100
+        elif cleared_rows >= 20:
+            difficulty = 200
+        elif cleared_rows >= 30:
+            difficulty = 400
+        elif cleared_rows >= 40:
+            difficulty = 800
+        
         game_over = checkGameState() 
 
         # Spawn a new shape when all shapes are frozen
