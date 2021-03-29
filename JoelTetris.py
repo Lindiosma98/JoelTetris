@@ -500,6 +500,17 @@ def move(window, dir):
     elif(dir == "U"):
         rotate(board)
 
+    elif (dir == "D"):
+        # emptyShape = np.zeros((4, 4))
+        for i in range(board.shape[0]):
+            for j in range(board.shape[1]):
+                if (board[i][j] == 1 and j < 9 and board[i][j + 1] != 2):
+                    new_coords.append(i + 1)
+                    new_coords.append(j)
+                    new_pairs.append(list(new_coords))
+                    new_coords.pop()
+                    new_coords.pop()
+
     # Prevents segfault by ensuring all coordinates in the new_pairs list are on the board
     if(len(new_pairs) == 4):
         # for each element in new_pairs (coordinates)
@@ -510,8 +521,6 @@ def move(window, dir):
             # set new pairs to 1
             board[new_pairs[i][0]][new_pairs[i][1]] = curr_shape
 
-    elif(dir == "D"):
-        emptyShape = np.zeros((4, 4))
 
     # Empty the coordinate lists for the next call to this function
     #pairs.clear()
@@ -560,6 +569,9 @@ def main():
                 elif keys[pygame.K_UP]:
                     #print("Right")
                     dirx = "U"
+                elif keys[pygame.K_DOWN]:
+                    #print("Down")
+                    dirx = "D"
 
         # Move the block in the direction dirx
         move(window, dirx)
