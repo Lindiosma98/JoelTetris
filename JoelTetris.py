@@ -16,13 +16,20 @@ rows = 20
 cols = 10
 i_counter = 0
 
+
 # margin to place around the board, just for aesthetic purposes
 margin = 50
 
 # Color constants
+<<<<<<< HEAD
 # []
 colors = [(128,0,128),(0,255,255),(0,0,255),(255,165,0),(255,0,0),(0,255,0),(255, 255, 0)]
 bg_color = (36,36,36)
+=======
+# [Black, White, Teal, Purple, Red, Green, Yellow]
+colors = [(50,50,125),(255,180,195),(0,255,255),(255,60,245),(255,45,45),(55,255,65),(245,255,50)]
+bg_color = (36, 36, 36)
+>>>>>>> 37fa490e3bfdc1ec0029010aab0b7ef8703594e5
 shape_number = -1
 shape_color = -1
 board = np.zeros((rows, cols))
@@ -147,7 +154,7 @@ def rotate(board):
                 if (j+minimum_y < 0):
                     need_shift = True
                     minimum_y = minimum_y + 1
-                if (board[i+minimum_x][j+minimum_y] >= 8 and board[i+minimum_x][j+minimum_y] >= 14):
+                if (board[i+minimum_x][j+minimum_y] >= 8 and board[i+minimum_x][j+minimum_y] <= 14):
                     return
     
     while (need_shift):
@@ -403,7 +410,7 @@ def freezeShapes(window, board):
                         elif(board[i][j] == 7):
                             board[i][j] = 14
 
-def clearRow():
+def clearRow(cleared_rows):
     rowFull = True
     rows, cols = board.shape[0], board.shape[1]    
     for i in range(rows):
@@ -417,6 +424,7 @@ def clearRow():
                     if k + 1 < i:
                         board[i-k][l] = board[i-k-1][l]
         rowFull = True
+    cleared_rows = cleared_rows + 1
 
 # Draws crosshatched pattern on canvas
 def draw_grid(window):
@@ -529,6 +537,7 @@ def main():
     game_over = False
     random.seed()
     dirx = ""
+    cleared_rows = 0
 
     # Place the first shape
     placeStartingShape(window, board)
@@ -578,8 +587,17 @@ def main():
         drawFrozenShapes(window, board)
 
         # Clears a full row of squares
-        clearRow()
+        clearRow(cleared_rows)
 
+        if cleared_rows >= 10:
+            difficulty = 100
+        elif cleared_rows >= 20:
+            difficulty = 200
+        elif cleared_rows >= 30:
+            difficulty = 400
+        elif cleared_rows >= 40:
+            difficulty = 800
+        
         game_over = checkGameState() 
 
         # Spawn a new shape when all shapes are frozen
