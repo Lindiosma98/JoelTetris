@@ -221,19 +221,19 @@ def rotate(board):
 def generateShapeIndex():
     shape_number = random.randrange(7)
     if(shape_number == 0):
-        shape_color = colors[shape_number]
+        shape_color = colors[0]
     elif(shape_number == 1):
-        shape_color = colors[shape_number]
+        shape_color = colors[1]
     elif(shape_number == 2):
-        shape_color = colors[shape_number]
+        shape_color = colors[2]
     elif(shape_number == 3):
-        shape_color = colors[shape_number]
+        shape_color = colors[3]
     elif(shape_number == 4):
-        shape_color = colors[shape_number]
+        shape_color = colors[4]
     elif(shape_number == 5):
-        shape_color = colors[shape_number]
+        shape_color = colors[5]
     elif(shape_number == 6):
-        shape_color = colors[shape_number]
+        shape_color = colors[6]
 
     return shape_number
 
@@ -270,8 +270,7 @@ def spawnShape(window, board):
     shape = Shapes[shape_number]
     for i in range(board.shape[0]):
         for j in range(board.shape[1]):
-            if(board[i][j] == 1 or board[i][j] == 2 or board[i][j] == 3 or board[i][j] == 4 
-                or board[i][j] == 5 or board[i][j] == 6 or board[i][j] == 7):
+            if(board[i][j] >= 1 and board[i][j] <= 7):
                 active = True
 
     if(active == False):
@@ -341,8 +340,7 @@ def fall(window, board):
 
     for i in range(rows):
         for j in range(cols):
-            if(board[i][j] == 1 or board[i][j] == 2 or board[i][j] == 3 or board[i][j] == 4 
-                or board[i][j] == 5 or board[i][j] == 6 or board[i][j] == 7):
+            if(board[i][j] >= 1 and board[i][j] <= 7):
                 coords.append(i)
                 coords.append(j)
                 pairs.append(list(coords))
@@ -355,8 +353,7 @@ def fall(window, board):
 
     for i in range(board.shape[0]):
             for j in range(board.shape[1]):
-                if((board[i][j] == 1 or board[i][j] == 2 or board[i][j] == 3 or board[i][j] == 4 
-                    or board[i][j] == 5 or board[i][j] == 6 or board[i][j] == 7) and i < 19):
+                if((board[i][j] >= 1 and board[i][j] <= 7) and i < 19):
                     curr_shape = board[i][j]
                     new_coords.append(i+1)
                     new_coords.append(j)
@@ -382,12 +379,8 @@ def freezeShapes(window, board):
     rows, cols = board.shape[0], board.shape[1]    
     for i in range(rows):
         for j in range(cols):
-            if(((board[i][j] == 1 or board[i][j] == 2 or board[i][j] == 3 or board[i][j] == 4 
-                or board[i][j] == 5 or board[i][j] == 6 or board[i][j] == 7) and i == 19) 
-                or (board[i][j] == 1 or board[i][j] == 2 or board[i][j] == 3 or board[i][j] == 4 
-                or board[i][j] == 5 or board[i][j] == 6 or board[i][j] == 7)
-                and (board[i+1][j] == 8 or board[i+1][j] == 9 or board[i+1][j] == 10 
-                or board[i+1][j] == 11 or board[i+1][j] == 12 or board[i+1][j] == 13 or board[i+1][j] == 14)):
+            if(((board[i][j] >= 1 and board[i][j] <=7 ) and i == 19) or (board[i][j] >= 1 and board[i][j] <=7 )
+                and (board[i+1][j] >= 8 )):
                 for i in range(rows):
                     for j in range(cols):
                         if(board[i][j] == 1):
@@ -410,8 +403,7 @@ def clearRow(cleared_rows):
     rows, cols = board.shape[0], board.shape[1]    
     for i in range(rows):
         for j in range(cols):
-            if (board[i][j] == 0 or (board[i][j] == 1 or board[i][j] == 2 or board[i][j] == 3 
-                or board[i][j] == 4 or board[i][j] == 5 or board[i][j] == 6 or board[i][j] == 7)):
+            if (board[i][j] == 0 or (board[i][j] >= 1 and board[i][j] <=7)):
                 rowFull = False
         if rowFull:
             cleared_rows = cleared_rows + 1
@@ -452,8 +444,7 @@ def draw_grid(window):
 def checkGameState():
     rows, cols = board.shape[0], board.shape[1] 
     for i in range(cols):
-        if (board[1][i] == 8 or board[1][i] == 9 or board[1][i] == 10 
-            or board[1][i] == 11 or board[1][i] == 12 or board[1][i] == 13 or board[1][i] == 14):
+        if (board[1][i] >= 8):
             return True
     return False
 
@@ -471,8 +462,7 @@ def move(window, dir):
     # loop through board array, store locations of 1's (aka where the shape currently is located)
     for i in range(rows):
         for j in range(cols):
-            if (board[i][j] == 1 or board[i][j] == 2 or board[i][j] == 3 or board[i][j] == 4 
-                or board[i][j] == 5 or board[i][j] == 6 or board[i][j] == 7):
+            if (board[i][j] >= 1 and board[i][j] <= 7):
                 coords.append(i)
                 coords.append(j)
                 pairs.append(list(coords))
@@ -558,7 +548,7 @@ def main():
         # Changes block movement speed
         pygame.time.delay(100)
         # One hundred ticks per second
-        clock.tick(100)
+        clock.tick(10)
         
         # Event handling (user input)
         pygame.key.set_repeat(1, 10) 
@@ -624,7 +614,7 @@ def main():
         drawShapes(window, board)
 
         # Block falls downward one unit every tick
-        if (not_run - difficulty == 0):
+        if (difficulty - not_run == 0):
             fall(window, board)
             not_run = 10
         else:
