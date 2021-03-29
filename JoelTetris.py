@@ -23,9 +23,7 @@ margin = 50
 colors = [(128,0,128),(0,255,255),(0,0,255),(255,165,0),(255,0,0),(0,255,0),(255, 255, 0)]
 bg_color = (36,36,36)
 
-# [Black, White, Teal, Purple, Red, Green, Yellow]
-colors = [(50,50,125),(255,180,195),(0,255,255),(255,60,245),(255,45,45),(55,255,65),(245,255,50)]
-bg_color = (36, 36, 36)
+bg_color = (36,36,36)
 
 shape_number = -1
 shape_color = -1
@@ -408,7 +406,7 @@ def freezeShapes(window, board):
                             board[i][j] = 14
 
 def clearRow(cleared_rows):
-    rowFull = True
+    rowFull = True    
     rows, cols = board.shape[0], board.shape[1]    
     for i in range(rows):
         for j in range(cols):
@@ -416,12 +414,24 @@ def clearRow(cleared_rows):
                 or board[i][j] == 4 or board[i][j] == 5 or board[i][j] == 6 or board[i][j] == 7)):
                 rowFull = False
         if rowFull:
+            cleared_rows = cleared_rows + 1
             for k in range(rows):
                 for l in range(cols):
                     if k + 1 < i:
                         board[i-k][l] = board[i-k-1][l]
         rowFull = True
-    cleared_rows = cleared_rows + 1
+    return cleared_rows
+  
+def updateScore(rowscleared, score):
+    if rowscleared == 1:
+        score = score + 40
+    elif rowscleared == 2:
+        score = score + 100
+    elif rowscleared == 3:
+        score = score + 300
+    elif rowscleared >= 4:
+        score = score + 1200
+    return score
 
 # Draws crosshatched pattern on canvas
 def draw_grid(window):
@@ -525,10 +535,14 @@ def move(window, dir):
 def main():
 
     # Initialization stuff
+    score = 0
     difficulty = 0
     not_run = 10
     window = pygame.display.set_mode((width, height))
-    pygame.display.set_caption("Joel Tetris")
+    pygame.display.set_caption("Joel Block Game")
+    image = pygame.image.load("logo.png")
+    pygame.font.init()
+    myfont = pygame.font.SysFont('Comic Sans MS', 30)
     #image = pygame.image.load('joel8bit.png')
     clock = pygame.time.Clock()
     game_over = False
@@ -583,8 +597,11 @@ def main():
         # Draw frozen shapes to the screen
         drawFrozenShapes(window, board)
 
+        # Temp value for cleared rows for score tracking
+        temp_cleared_rows = cleared_rows
+        
         # Clears a full row of squares
-        clearRow(cleared_rows)
+        cleared_rows = clearRow(cleared_rows)
 
         if cleared_rows >= 10:
             difficulty = 100
@@ -594,6 +611,9 @@ def main():
             difficulty = 400
         elif cleared_rows >= 40:
             difficulty = 800
+            
+        # Updates score based on rows cleared
+        score = updateScore((cleared_rows - temp_cleared_rows), score)
         
         game_over = checkGameState() 
 
@@ -612,6 +632,13 @@ def main():
 
         # Draw crosshatched pattern on window
         draw_grid(window)
+        
+        # Draw game logo
+        window.blit(image, (24, 34))
+        
+        # Draw score and score text on window
+        scoreText = myfont.render(f"Score: {score}", False, (255,255,255))
+        window.blit(scoreText, (30, 300))
         
         pygame.display.update()
              
