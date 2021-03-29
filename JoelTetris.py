@@ -129,7 +129,7 @@ def rotate(board):
     print("Original shape: \n" + str(empty_shape))
     # rotate the recreated shape array
     rotated_shape = np.rot90(empty_shape)
-    print(rotated_shape)
+    #print("Rotated Shape: \n" + str(rotated_shape))
 
     empty_columns = 0
     empty_rows = 0
@@ -142,44 +142,16 @@ def rotate(board):
         if(empty==False):
             empty_columns+=1
 
-    '''for i in range(4):
-        empty = False
-        for j in range(4):
-            if(empty_shape[i][j] == 1):
-                empty = True
-        if(empty==False):
-            empty_rows+=1'''
-
-    print("Empty columns: " + str(empty_columns))
-    print("Empty rows: " + str(empty_rows))
-
-    '''if(empty_columns == 3 or empty_rows == 3):
-        global i_counter
-        i_counter+=1
-
-        print("i_counter: " + str(i_counter))
-        if(i_counter % 2 == 0):
-            print("should move down")'''
-
-    #print("Empty columns: " + str(emptyColumns))
     # This chunk here was me attempting to mitigate the shift created by rotation, might use this idea to some extent later
-    for i in range(rotated_shape.shape[0]):
-        for j in range(rotated_shape.shape[1]):
-            if(rotated_shape[i][j] == 1):
-                '''if(i_counter % 2 == 0):
-                    rotated_shape[i+3][j] = 1
+    if(empty_columns != 0):
+        for i in range(rotated_shape.shape[0]):
+            for j in range(rotated_shape.shape[1]):
+                if(rotated_shape[i][j] == 1):
+                    rotated_shape[i-(empty_columns)][j] = 1
                     rotated_shape[i][j] = 0
-                elif(i_counter % 2 == 1): 
-                    rotated_shape[i-3][j] = 1
-                    rotated_shape[i][j] = 0
-                else:'''
-                rotated_shape[i-(empty_columns)][j] = 1
-                rotated_shape[i][j] = 0
 
-    print(rotated_shape)
-    print('\n')
+        print("Rotated and Shifted Shape: \n" + str(rotated_shape))
     
-
     # Draw the rotated shape back to the game board at its original position
     for i in range(empty_shape.shape[0]):
         for j in range(empty_shape.shape[1]):
@@ -428,7 +400,7 @@ def main():
         # Changes block movement speed
         pygame.time.delay(100)
         # One hundred ticks per second
-        clock.tick(10)
+        clock.tick(3)
         
         # Event handling (user input)
         pygame.key.set_repeat(1, 10) 
