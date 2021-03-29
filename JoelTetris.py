@@ -412,15 +412,52 @@ def clearRow(cleared_rows):
         rowFull = True
     return cleared_rows
   
-def updateScore(rowscleared, score):
-    if rowscleared == 1:
-        score = score + 40
-    elif rowscleared == 2:
-        score = score + 100
-    elif rowscleared == 3:
-        score = score + 300
-    elif rowscleared >= 4:
-        score = score + 1200
+def updateScore(rowscleared, difficulty, score):
+    if difficulty == 1:
+        if rowscleared == 1:
+            score = score + 40
+        elif rowscleared == 2:
+            score = score + 100
+        elif rowscleared == 3:
+            score = score + 300
+        elif rowscleared >= 4:
+            score = score + 1200
+    elif difficulty == 2:
+        if rowscleared == 1:
+            score = score + 80
+        elif rowscleared == 2:
+            score = score + 200
+        elif rowscleared == 3:
+            score = score + 600
+        elif rowscleared >= 4:
+            score = score + 2400
+    elif difficulty == 3:
+        if rowscleared == 1:
+            score = score + 120
+        elif rowscleared == 2:
+            score = score + 300
+        elif rowscleared == 3:
+            score = score + 900
+        elif rowscleared >= 4:
+            score = score + 3600
+    elif difficulty == 9:
+        if rowscleared == 1:
+            score = score + 400
+        elif rowscleared == 2:
+            score = score + 1000
+        elif rowscleared == 3:
+            score = score + 3000
+        elif rowscleared >= 4:
+            score = score + 12000
+    elif difficulty > 9:
+        if rowscleared == 1:
+            score = score + (40 * (difficulty + 1))
+        elif rowscleared == 2:
+            score = score + (100 * (difficulty + 1))
+        elif rowscleared == 3:
+            score = score + (300 * (difficulty + 1))
+        elif rowscleared >= 4:
+            score = score + (1200 * (difficulty + 1))
     return score
 
 # Draws crosshatched pattern on canvas
@@ -529,9 +566,10 @@ def main():
     window = pygame.display.set_mode((width, height))
     pygame.display.set_caption("Joel Block Game")
     image = pygame.image.load("logo.png")
+    gameIcon = pygame.image.load('icon.png')
+    pygame.display.set_icon(gameIcon)
     pygame.font.init()
-    myfont = pygame.font.SysFont('Comic Sans MS', 30)
-    #image = pygame.image.load('joel8bit.png')
+    myfont = pygame.font.Font("comfortaa_regular.ttf", 40)
     clock = pygame.time.Clock()
     game_over = False
     random.seed()
@@ -610,11 +648,11 @@ def main():
         elif cleared_rows < 45:
             difficulty = 9
         elif cleared_rows >= 50:
-            diffculty = 10
+            difficulty = 10
             
             
         # Updates score based on rows cleared
-        score = updateScore((cleared_rows - temp_cleared_rows), score)
+        score = updateScore((cleared_rows - temp_cleared_rows), difficulty, score)
         
         game_over = checkGameState() 
 
@@ -640,8 +678,8 @@ def main():
         window.blit(image, (24, 34))
         
         # Draw score and score text on window
-        scoreText = myfont.render(f"Score: {score}", False, (255,255,255))
-        lineText = myfont.render(f"Level: {difficulty}", False, (255,255,255))
+        scoreText = myfont.render(f"Score: {score}", True, (255,255,255))
+        lineText = myfont.render(f"Level: {difficulty}", True, (255,255,255))
         window.blit(scoreText, (30, 300))
         window.blit(lineText, (30, 350))
         
