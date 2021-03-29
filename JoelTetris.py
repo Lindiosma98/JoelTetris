@@ -84,16 +84,18 @@ def rotate(board):
     pairs = []
     empty_columns = 0
     empty = False
+    current_color = 0
 
     # get coordinates of the unique shapes in the board
     for i in range(board.shape[0]):
         for j in range(board.shape[1]):
-            if(board[i][j] == 1):
+            if(board[i][j] >= 1 and board[i][j] <= 7):
                 coords.append(i)
                 coords.append(j)
                 pairs.append(list(coords))
                 coords.pop()
                 coords.pop()
+                current_color = board[i][j]
 
     # get the x values from the coordinates
     for i in pairs:
@@ -121,7 +123,7 @@ def rotate(board):
 
     # fill in the 1's
     for i in range(4):
-        empty_shape[pairs[i][0]][pairs[i][1]] = 1
+        empty_shape[pairs[i][0]][pairs[i][1]] = current_color
 
     pairs.clear()
 
@@ -132,7 +134,7 @@ def rotate(board):
     need_shift = False
     for i in range(empty_shape.shape[0]):
         for j in range(empty_shape.shape[1]):
-            if(rotated_shape[i][j] == 1):
+            if(rotated_shape[i][j] == current_color):
                 if (i+minimum_x >= rows):
                     need_shift = True
                     minimum_x = minimum_x - 1 
@@ -145,14 +147,14 @@ def rotate(board):
                 if (j+minimum_y < 0):
                     need_shift = True
                     minimum_y = minimum_y + 1
-                if (board[i+minimum_x][j+minimum_y] == 2):
+                if (board[i+minimum_x][j+minimum_y] >= 8 and board[i+minimum_x][j+minimum_y] >= 14):
                     return
     
     while (need_shift):
         need_shift = False
         for i in range(empty_shape.shape[0]):
             for j in range(empty_shape.shape[1]):
-                if(rotated_shape[i][j] == 1):
+                if(rotated_shape[i][j] == current_color):
                     if (i+minimum_x >= rows):
                         need_shift = True
                         minimum_x = minimum_x - 1 
@@ -165,13 +167,13 @@ def rotate(board):
                     if (j+minimum_y < 0):
                         need_shift = True
                         minimum_y = minimum_y + 1
-                    if (board[i+minimum_x][j+minimum_y] == 2):
+                    if (board[i+minimum_x][j+minimum_y] >= 8 and board[i+minimum_x][j+minimum_y] >= 14):
                         return
                         
         
     for i in range(board.shape[0]):
         for j in range(board.shape[1]):
-            if(board[i][j] == 1):
+            if(board[i][j] == current_color):
                 board[i][j] = 0
     #print("Rotated Shape: \n" + str(rotated_shape))
 
@@ -213,6 +215,77 @@ def rotate(board):
                 board[i+minimum_x][j+minimum_y] = 6
             elif(rotated_shape[i][j] == 7):
                 board[i+minimum_x][j+minimum_y] = 7
+                
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                 
 
 def generateShapeIndex():
@@ -501,18 +574,8 @@ def move(window, dir):
         rotate(board)
 
     elif (dir == "D"):
-        for i in range(board.shape[0]):
-            for j in range(board.shape[1]):
-                if((board[i][j] == 1 or board[i][j] == 2 or board[i][j] == 3 or board[i][j] == 4
-                    or board[i][j] == 5 or board[i][j] == 6 or board[i][j] == 7) and j < 9
-                    and (board[i][j+1] != 8 or board[i][j+1] != 9 or board[i][j+1] != 10
-                    or board[i][j+1] != 11 or board[i][j+1] != 12 or board[i][j+1] != 13 or board[i][j+1] != 14)):
-                    curr_shape = board[i][j]
-                    new_coords.append(i+1)
-                    new_coords.append(j)
-                    new_pairs.append(list(new_coords))
-                    new_coords.pop()
-                    new_coords.pop()
+        # emptyShape = np.zeros((4, 4))
+        fall(window, board)
 
     # Prevents segfault by ensuring all coordinates in the new_pairs list are on the board
     if(len(new_pairs) == 4):
