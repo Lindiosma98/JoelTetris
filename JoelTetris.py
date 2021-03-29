@@ -147,7 +147,7 @@ def rotate(board):
                 if (j+minimum_y < 0):
                     need_shift = True
                     minimum_y = minimum_y + 1
-                if (board[i+minimum_x][j+minimum_y] >= 8 and board[i+minimum_x][j+minimum_y] >= 14):
+                if (board[i+minimum_x][j+minimum_y] >= 8 and board[i+minimum_x][j+minimum_y] <= 14):
                     return
     
     while (need_shift):
@@ -167,7 +167,7 @@ def rotate(board):
                     if (j+minimum_y < 0):
                         need_shift = True
                         minimum_y = minimum_y + 1
-                    if (board[i+minimum_x][j+minimum_y] >= 8 and board[i+minimum_x][j+minimum_y] >= 14):
+                    if (board[i+minimum_x][j+minimum_y] >= 8 and board[i+minimum_x][j+minimum_y] <= 14):
                         return
                         
         
