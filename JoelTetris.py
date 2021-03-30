@@ -84,6 +84,7 @@ JJM = np.array([
     (8,8,0,0),
     (0,0,0,0)
     ])
+    #50 to help with collison
 OJM = np.array([
     (9,9,9,0),
     (9,0,9,0),
@@ -181,7 +182,7 @@ def rotate(board):
                 if (j+minimum_y < 0):
                     need_shift = True
                     minimum_y = minimum_y + 1
-                if (board[i+minimum_x][j+minimum_y] >= 8 and board[i+minimum_x][j+minimum_y] <= 14):
+                if (board[i+minimum_x][j+minimum_y] >= 12 and board[i+minimum_x][j+minimum_y] <= 18):
                     return
     
     while (need_shift):
@@ -201,7 +202,7 @@ def rotate(board):
                     if (j+minimum_y < 0):
                         need_shift = True
                         minimum_y = minimum_y + 1
-                    if (board[i+minimum_x][j+minimum_y] >= 8 and board[i+minimum_x][j+minimum_y] <= 14):
+                    if (board[i+minimum_x][j+minimum_y] >= 12 and board[i+minimum_x][j+minimum_y] <= 18):
                         return
                         
         
@@ -217,7 +218,7 @@ def rotate(board):
     for i in range(4):
         empty = False
         for j in range(4):
-            if(empty_shape[j][i] >= 1 and empty_shape[j][i] <= 14):
+            if(empty_shape[j][i] >= 1 and empty_shape[j][i] <= 7):
                 empty = True
         if(empty==False):
             empty_columns+=1
@@ -226,7 +227,7 @@ def rotate(board):
     if(empty_columns != 0):
         for i in range(rotated_shape.shape[0]):
             for j in range(rotated_shape.shape[1]):
-                if(rotated_shape[i][j] >= 1 and rotated_shape[i][j] <= 7 or rotated_shape[i][j] >= 8 and rotated_shape[i][j] <= 14):
+                if(rotated_shape[i][j] >= 1 and rotated_shape[i][j] <= 7 or rotated_shape[i][j] >= 12 and rotated_shape[i][j] <= 18):
                     rotated_shape[i-(empty_columns)][j] = current_color
                     rotated_shape[i][j] = 0
 
@@ -264,7 +265,7 @@ def rotateJoelMode(board):
     # get coordinates of the unique shapes in the board
     for i in range(board.shape[0]):
         for j in range(board.shape[1]):
-            if(board[i][j] >= 1 and board[i][j] <= 4):
+            if(board[i][j] >= 8 and board[i][j] <= 11):
                 current_color = board[i][j]
                 coords.append(i)
                 coords.append(j)
@@ -323,7 +324,7 @@ def rotateJoelMode(board):
                 if (j+minimum_y < 0):
                     need_shift = True
                     minimum_y = minimum_y + 1
-                if (board[i+minimum_x][j+minimum_y] >= 8 and board[i+minimum_x][j+minimum_y] <= 11):
+                if (board[i+minimum_x][j+minimum_y] >= 19 and board[i+minimum_x][j+minimum_y] <= 22):
                     return
     
     while (need_shift):
@@ -343,7 +344,7 @@ def rotateJoelMode(board):
                     if (j+minimum_y < 0):
                         need_shift = True
                         minimum_y = minimum_y + 1
-                    if (board[i+minimum_x][j+minimum_y] >= 8 and board[i+minimum_x][j+minimum_y] <= 11):
+                    if (board[i+minimum_x][j+minimum_y] >= 19 and board[i+minimum_x][j+minimum_y] <= 22):
                         return
                         
         
@@ -359,7 +360,7 @@ def rotateJoelMode(board):
     for i in range(4):
         empty = False
         for j in range(4):
-            if(empty_shape[j][i] >= 1 and empty_shape[j][i] <= 11):
+            if(empty_shape[j][i] >= 19 and empty_shape[j][i] <= 22):
                 empty = True
         if(empty==False):
             empty_columns+=1
@@ -368,7 +369,7 @@ def rotateJoelMode(board):
     if(empty_columns != 0):
         for i in range(rotated_shape.shape[0]):
             for j in range(rotated_shape.shape[1]):
-                if(rotated_shape[i][j] >= 1 and rotated_shape[i][j] <= 4 or rotated_shape[i][j] >= 8 and rotated_shape[i][j] <= 11):
+                if(rotated_shape[i][j] >= 8 and rotated_shape[i][j] <= 11 or rotated_shape[i][j] >= 19 and rotated_shape[i][j] <= 22):
                     rotated_shape[i-(empty_columns)][j] = current_color
                     rotated_shape[i][j] = 0
 
@@ -377,14 +378,14 @@ def rotateJoelMode(board):
     # Draw the rotated shape back to the game board at its original position
     for i in range(empty_shape.shape[0]):
         for j in range(empty_shape.shape[1]):
-            if(rotated_shape[i][j] == 1):
-                board[i+minimum_x][j+minimum_y] = 1
-            elif(rotated_shape[i][j] == 2):
-                board[i+minimum_x][j+minimum_y] = 2
-            elif(rotated_shape[i][j] == 3):
-                board[i+minimum_x][j+minimum_y] = 3
-            elif(rotated_shape[i][j] == 4):
-                board[i+minimum_x][j+minimum_y] = 4
+            if(rotated_shape[i][j] == 8):
+                board[i+minimum_x][j+minimum_y] = 8
+            elif(rotated_shape[i][j] == 9):
+                board[i+minimum_x][j+minimum_y] = 9
+            elif(rotated_shape[i][j] == 10):
+                board[i+minimum_x][j+minimum_y] = 10
+            elif(rotated_shape[i][j] == 11):
+                board[i+minimum_x][j+minimum_y] = 11
 
 def generateShapeIndex():
     shape_number = random.randrange(7)
@@ -471,7 +472,7 @@ def spawnShapeJoelMode(window, board):
                 active = True
 
     if(active == False):
-        next_sn = generateShapeIndex()
+        next_sn = generateShapeIndexJoelMode()
         for i in range(shape.shape[0]):
             for j in range(shape.shape[1]):
                 # only draw squares in cells populated with 8-11
@@ -654,16 +655,32 @@ def fallJoelMode(window, board):
                     new_pairs.append(list(new_coords))
                     new_coords.pop()
                     new_coords.pop()
-                    if (i+1 >= rows or board[i+1][j] >= 8):
+                    if (i+1 >= rows or board[i+1][j] >= 19):
                         return
 
 
-    if(len(new_pairs) == 4):
+    if(len(new_pairs) == 6):
         # for each element in new_pairs (coordinates)
-        for i in range(4):
+        for i in range(6):
             # set old pairs to 0
             board[pairs[i][0]][pairs[i][1]] = 0
-        for i in range(4):
+        for i in range(6):
+            # set new pairs to 1
+            board[new_pairs[i][0]][new_pairs[i][1]] = curr_shape #Problem lies here for colors
+    elif(len(new_pairs) == 8):
+        # for each element in new_pairs (coordinates)
+        for i in range(8):
+            # set old pairs to 0
+            board[pairs[i][0]][pairs[i][1]] = 0
+        for i in range(8):
+            # set new pairs to 1
+            board[new_pairs[i][0]][new_pairs[i][1]] = curr_shape #Problem lies here for colors
+    elif(len(new_pairs) == 10):
+        # for each element in new_pairs (coordinates)
+        for i in range(10):
+            # set old pairs to 0
+            board[pairs[i][0]][pairs[i][1]] = 0
+        for i in range(10):
             # set new pairs to 1
             board[new_pairs[i][0]][new_pairs[i][1]] = curr_shape #Problem lies here for colors
     #print(new_pairs)
@@ -698,8 +715,8 @@ def freezeShapesJoelMode(window, board):
     rows, cols = board.shape[0], board.shape[1]    
     for i in range(rows):
         for j in range(cols):
-            if(((board[i][j] >= 1 and board[i][j] <=4 ) and i == 19) or (board[i][j] >= 1 and board[i][j] <=4 )
-                and (board[i+1][j] >= 8 )):
+            if(((board[i][j] >= 8 and board[i][j] <=11 ) and i == 19) or (board[i][j] >= 8 and board[i][j] <=11 )
+                and (board[i+1][j] >= 19 )):
                 for i in range(rows):
                     for j in range(cols):
                         if(board[i][j] == 8):
@@ -814,6 +831,13 @@ def checkGameState():
             return True
     return False
 
+def checkGameStateJoelMode():
+    rows, cols = board.shape[0], board.shape[1] 
+    for i in range(cols):
+        if (board[1][i] >= 19):
+            return True
+    return False
+
 # Moves pieces left and right
 def move(window, dir):
     # simple list of shape coordinate values (aka where the 1's are in the board)
@@ -916,7 +940,7 @@ def moveJoelMode(window, dir):
         # Get all coordinates one cell to the left of current 1's
         for i in range(board.shape[0]):
             for j in range(board.shape[1]):
-                if((board[i][j] >= 1 and board[i][j] <= 8) and (j-1 >= 0) and (board[i][j-1] < 11)):
+                if((board[i][j] >= 8 and board[i][j] <= 11) and (j-1 >= 0) and (board[i][j-1] < 19)):
                     curr_shape = board[i][j]
                     new_coords.append(i)
                     new_coords.append(j-1)
@@ -927,7 +951,7 @@ def moveJoelMode(window, dir):
     elif(dir == "R"):
         for i in range(board.shape[0]):
             for j in range(board.shape[1]):
-                if((board[i][j] >= 1 and board[i][j] <= 8) and (j+1 < cols) and (board[i][j+1] < 11)):
+                if((board[i][j] >= 8 and board[i][j] <= 11) and (j+1 < cols) and (board[i][j+1] < 19)):
                     curr_shape = board[i][j]
                     new_coords.append(i)
                     new_coords.append(j+1)
@@ -936,22 +960,37 @@ def moveJoelMode(window, dir):
                     new_coords.pop()
 
     elif(dir == "U"):
-        rotate(board)
+        rotateJoelMode(board)
 
     elif (dir == "D"):
         # emptyShape = np.zeros((4, 4))
-        fall(window, board)
+        fallJoelMode(window, board)
 
     # Prevents segfault by ensuring all coordinates in the new_pairs list are on the board
-    if(len(new_pairs) == 4):
+    if(len(new_pairs) == 6):
         # for each element in new_pairs (coordinates)
-        for i in range(4):
+        for i in range(6):
             # set old pairs to 0
             board[pairs[i][0]][pairs[i][1]] = 0
-        for i in range(4):
+        for i in range(6):
             # set new pairs to 1
             board[new_pairs[i][0]][new_pairs[i][1]] = curr_shape
-
+    elif(len(new_pairs) == 8):
+        # for each element in new_pairs (coordinates)
+        for i in range(8):
+            # set old pairs to 0
+            board[pairs[i][0]][pairs[i][1]] = 0
+        for i in range(8):
+            # set new pairs to 1
+            board[new_pairs[i][0]][new_pairs[i][1]] = curr_shape
+    if(len(new_pairs) == 10):
+        # for each element in new_pairs (coordinates)
+        for i in range(10):
+            # set old pairs to 0
+            board[pairs[i][0]][pairs[i][1]] = 0
+        for i in range(10):
+            # set new pairs to 1
+            board[new_pairs[i][0]][new_pairs[i][1]] = curr_shape
 
     # Empty the coordinate lists for the next call to this function
     #pairs.clear()
@@ -1213,7 +1252,7 @@ def JoelMode():
             # Updates score based on rows cleared
             score = updateScore((cleared_rows - temp_cleared_rows), difficulty, score)
         
-            game_over = checkGameState() 
+            game_over = checkGameStateJoelMode() 
 
             # Spawn a new shape when all shapes are frozen
             spawnShapeJoelMode(window, board)
