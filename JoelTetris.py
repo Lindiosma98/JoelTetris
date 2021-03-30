@@ -917,6 +917,8 @@ def moveJoelMode(window, dir):
     # simple list of shape coordinate values (aka where the 1's are in the board)
     coords = []
 
+    num_cells = 0
+
     # the same list as above, but converted into list of lists (each of length 2 for easy and sensible indexing)
     pairs = []
     
@@ -927,6 +929,7 @@ def moveJoelMode(window, dir):
     for i in range(rows):
         for j in range(cols):
             if (board[i][j] >= 8 and board[i][j] <= 11):
+                num_cells += 1
                 coords.append(i)
                 coords.append(j)
                 pairs.append(list(coords))
@@ -969,28 +972,12 @@ def moveJoelMode(window, dir):
         fallJoelMode(window, board)
 
     # Prevents segfault by ensuring all coordinates in the new_pairs list are on the board
-    if(len(new_pairs) == 6):
+    if(len(new_pairs) == num_cells):
         # for each element in new_pairs (coordinates)
-        for i in range(6):
+        for i in range(num_cells):
             # set old pairs to 0
             board[pairs[i][0]][pairs[i][1]] = 0
-        for i in range(6):
-            # set new pairs to 1
-            board[new_pairs[i][0]][new_pairs[i][1]] = curr_shape
-    elif(len(new_pairs) == 8):
-        # for each element in new_pairs (coordinates)
-        for i in range(8):
-            # set old pairs to 0
-            board[pairs[i][0]][pairs[i][1]] = 0
-        for i in range(8):
-            # set new pairs to 1
-            board[new_pairs[i][0]][new_pairs[i][1]] = curr_shape
-    if(len(new_pairs) == 10):
-        # for each element in new_pairs (coordinates)
-        for i in range(10):
-            # set old pairs to 0
-            board[pairs[i][0]][pairs[i][1]] = 0
-        for i in range(10):
+        for i in range(num_cells):
             # set new pairs to 1
             board[new_pairs[i][0]][new_pairs[i][1]] = curr_shape
 
