@@ -299,8 +299,9 @@ def rotateJoelMode(board):
         pairs[i][1] -= minimum_y
 
     # fill in the 1's
-    for i in range(4):
+    for i in range(6):
         empty_shape[pairs[i][0]][pairs[i][1]] = current_color
+    
 
     pairs.clear()
 
@@ -360,7 +361,7 @@ def rotateJoelMode(board):
     for i in range(4):
         empty = False
         for j in range(4):
-            if(empty_shape[j][i] >= 19 and empty_shape[j][i] <= 22):
+            if(empty_shape[j][i] >= 8 and empty_shape[j][i] <= 11):
                 empty = True
         if(empty==False):
             empty_columns+=1
