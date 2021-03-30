@@ -21,7 +21,7 @@ margin = 50
 
 # Color constants
 colors = [(128,0,128),(0,255,255),(0,0,255),(255,165,0),(255,0,0),(0,255,0),(255, 255, 0)]
-bg_color = (36,36,36)
+joel_colors = [(128,0,128),(0,255,255),(0,0,255),(255,165,0),(255,0,0),(0,255,0),(255, 255, 0)]
 
 bg_color = (36,36,36)
 
@@ -96,12 +96,13 @@ def rotate(board):
     for i in range(board.shape[0]):
         for j in range(board.shape[1]):
             if(board[i][j] >= 1 and board[i][j] <= 7):
+                current_color = board[i][j]
                 coords.append(i)
                 coords.append(j)
                 pairs.append(list(coords))
                 coords.pop()
                 coords.pop()
-                current_color = board[i][j]
+                
 
     # get the x values from the coordinates
     for i in pairs:
@@ -556,15 +557,18 @@ def move(window, dir):
     new_coords.clear()
     new_pairs.clear()
 
+def JoelBlockGame():
 
-def main():
+    for i in range(board.shape[0]):
+        for j in range(board.shape[1]):
+            board[i][j] = 0
 
     # Initialization stuff
     score = 0
     difficulty = 0
     not_run = 10
     window = pygame.display.set_mode((width, height))
-    pygame.display.set_caption("Joel Block Game")
+    pygame.display.set_caption("Joel Mode")
     image = pygame.image.load("logo.png")
     gameIcon = pygame.image.load('icon.png')
     pygame.display.set_icon(gameIcon)
@@ -579,7 +583,7 @@ def main():
     # Place the first shape
     placeStartingShape(window, board)
 
-    # Game loop
+    # Game loop regular Joel Block Game
     while not game_over:
         # Changes block movement speed
         pygame.time.delay(75)
@@ -684,7 +688,185 @@ def main():
         window.blit(lineText, (30, 350))
         
         pygame.display.update()
+
+    pygame.quit()
              
+def JoelMode():
+
+    for i in range(board.shape[0]):
+        for j in range(board.shape[1]):
+            board[i][j] = 0
+
+    replay = ""
+    play_on = True
+    
+    # Initialization stuff
+    score = 0
+    difficulty = 0
+    not_run = 10
+    window = pygame.display.set_mode((width, height))
+    pygame.display.set_caption("Joel Block Game")
+    image = pygame.image.load("logo.png")
+    gameIcon = pygame.image.load('icon.png')
+    pygame.display.set_icon(gameIcon)
+    pygame.font.init()
+    myfont = pygame.font.Font("comfortaa_regular.ttf", 40)
+    clock = pygame.time.Clock()
+    game_over = False
+    random.seed()
+    dirx = ""
+    cleared_rows = 0
+
+    # Place the first shape
+    placeStartingShape(window, board)
+    
+    while play_on:
+    # Game loop regular Joel Block Game
+        game_over = False
+        while not game_over:
+            # Changes block movement speed
+            pygame.time.delay(75)
+            # One hundred ticks per second
+            clock.tick(100)
+        
+            # Event handling (user input)
+            pygame.key.set_repeat(1, 10) 
+            for event in pygame.event.get(): 
+                if event.type == pygame.QUIT: 
+                    game_over = True 
+
+                keys = pygame.key.get_pressed()
+                for key in keys:
+                    if keys[pygame.K_LEFT]:
+                        #print("Left")
+                        dirx = "L"
+                    elif keys[pygame.K_RIGHT]:
+                        #print("Right")
+                        dirx = "R"
+                    elif keys[pygame.K_UP]:
+                        #print("Right")
+                        dirx = "U"
+                    elif keys[pygame.K_DOWN]:
+                        #print("Down")
+                        dirx = "D"
+
+            # Move the block in the direction dirx
+            move(window, dirx)
+            dirx = ""
+
+            # Prevent any shapes that have hit the bottom of the board from moving
+            freezeShapes(window, board)
+
+            # Clear the screen and set the screen background
+            window.fill(bg_color)
+
+            # Print the board state in console
+            print(board)
+
+            # Draw frozen shapes to the screen
+            drawFrozenShapes(window, board)
+
+            # Temp value for cleared rows for score tracking
+            temp_cleared_rows = cleared_rows
+        
+            # Clears a full row of squares
+            cleared_rows = clearRow(cleared_rows)
+
+            if cleared_rows < 5:
+                difficulty = 1
+            elif cleared_rows < 10:
+                difficulty = 2
+            elif cleared_rows < 15:
+                difficulty = 3
+            elif cleared_rows < 20:
+                difficulty = 4
+            elif cleared_rows < 25:
+                difficulty = 5
+            elif cleared_rows < 30:
+                difficulty = 6
+            elif cleared_rows < 35:
+                difficulty = 7
+            elif cleared_rows < 40:
+                difficulty = 8
+            elif cleared_rows < 45:
+                difficulty = 9
+            elif cleared_rows >= 50:
+                difficulty = 10
+            
+            
+            # Updates score based on rows cleared
+            score = updateScore((cleared_rows - temp_cleared_rows), difficulty, score)
+        
+            game_over = checkGameState() 
+
+            # Spawn a new shape when all shapes are frozen
+            spawnShape(window, board)
+
+            # Draw shape to screen
+            drawShapes(window, board)
+
+            drawNextShape(window, board)
+
+            # Block falls downward one unit every tick
+            if (difficulty - not_run >= 0):
+                fall(window, board)
+                not_run = 10
+            else:
+                not_run = not_run - 1
+
+        # Draw crosshatched pattern on window
+            draw_grid(window)
+        
+            # Draw game logo
+            window.blit(image, (24, 34))
+        
+            # Draw score and score text on window
+            scoreText = myfont.render(f"Score: {score}", True, (255,255,255))
+            lineText = myfont.render(f"Level: {difficulty}", True, (255,255,255))
+            window.blit(scoreText, (30, 300))
+            window.blit(lineText, (30, 350))
+        
+            pygame.display.update()
+
+        pygame.quit()
+
+        replay = input("Replay Joel Block Game? (y/n)")
+        replay = replay.lower()
+        while replay != "y" or replay != "n":
+            print("Incorrect input")
+            replay = input("Replay Joel Block Game? (y/n)")
+
+        if replay == "y":
+            play_on = True
+        else:
+            play_on = False
+
+
+def main():
+    replay = ""
+    play_on = True
+
+    while play_on:
+        print ("""
+        1. Joel Block Game
+        2. Joel Mode
+        3. Exit Game
+        """)
+
+        choice = int(input("Pick menu option of your choosing: "))
+
+        while choice < 1 or choice > 3:
+            print("No such option, try again")
+            choice = int(input("Pick menu option of your choosing: "))
+
+        if choice == 1:
+            JoelBlockGame()
+        elif choice == 2:
+            JoelMode()
+        elif choice == 3:
+            print("Thanks for playing this ballin game")
+            quit()
+   
     pygame.quit()
 
 main()
