@@ -305,7 +305,16 @@ def drawNextShape(window, board):
                     start_y = j
                 #print(int(shape[i][j]) - 1)
                 ns = int(shape[i][j]) - 1
-                pygame.draw.rect(window, colors[ns], ((10+j-start_y) * square_size, (10+i-start_x) * square_size+margin, square_size, square_size)) 
+                if ns == 1:
+                    pygame.draw.rect(window, colors[ns], ((6+j-start_y) * square_size, (10+i-start_x) * square_size+margin, square_size, square_size)) 
+                elif ns == 6 or ns == 5 or ns == 4:
+                    pygame.draw.rect(window, colors[ns], ((7+j-start_y) * square_size, (9+i-start_x) * square_size+margin, square_size, square_size)) 
+                elif ns == 2:
+                    pygame.draw.rect(window, colors[ns], ((8+j-start_y) * square_size, (10+i-start_x) * square_size+margin, square_size, square_size))
+                elif ns == 3:
+                    pygame.draw.rect(window, colors[ns], ((6+j-start_y) * square_size, (10+i-start_x) * square_size+margin, square_size, square_size))
+                else:
+                    pygame.draw.rect(window, colors[ns], ((7+j-start_y) * square_size, (9+i-start_x) * square_size+margin, square_size, square_size))
                 #pygame.draw.rect(window, colors[ns], (j*square_size+450, i*square_size+margin, square_size, square_size))
 
 # Draws all frozen shapes (2) to the board
@@ -572,7 +581,7 @@ def JoelBlockGame():
     gameIcon = pygame.image.load('icon.png')
     pygame.display.set_icon(gameIcon)
     pygame.font.init()
-    myfont = pygame.font.Font("comfortaa_regular.ttf", 40)
+    defaultText = pygame.font.Font("comfortaa_regular.ttf", 40)
     clock = pygame.time.Clock()
     game_over = False
     random.seed()
@@ -686,8 +695,8 @@ def JoelBlockGame():
             window.blit(image, (24, 34))
         
             # Draw score and score text on window
-            scoreText = myfont.render(f"Score: {score}", True, (255,255,255))
-            lineText = myfont.render(f"Level: {difficulty}", True, (255,255,255))
+            scoreText = defaultText.render(f"Score: {score}", True, (255,255,255))
+            lineText = defaultText.render(f"Level: {difficulty}", True, (255,255,255))
             window.blit(scoreText, (30, 300))
             window.blit(lineText, (30, 350))
         
@@ -721,7 +730,21 @@ def JoelMode():
     gameIcon = pygame.image.load('icon.png')
     pygame.display.set_icon(gameIcon)
     pygame.font.init()
-    myfont = pygame.font.Font("comfortaa_regular.ttf", 40)
+    defaultText = pygame.font.Font("comfortaa_regular.ttf", 30)
+    pausedTextFont = pygame.font.Font("comfortaa_regular.ttf", 48)
+
+    pause = False
+
+    pauseTextFont = pygame.font.Font("comfortaa_regular.ttf", 24)
+    pauseButtonText = "PAUSE"
+    pauseButtonPos = [70, 572]
+    pauseButtonSize = [145, 55]
+
+    quitTextFont = pygame.font.Font("comfortaa_regular.ttf", 24)
+    quitButtonText = "QUIT"
+    quitButtonPos = [232, 572]
+    quitButtonSize = [145, 55]
+
     clock = pygame.time.Clock()
     game_over = False
     random.seed()
@@ -743,36 +766,57 @@ def JoelMode():
             # One hundred ticks per second
             clock.tick(100)
         
+            mouse = pygame.mouse.get_pos()
+
             # Event handling (user input)
             pygame.key.set_repeat(1, 10) 
             for event in pygame.event.get(): 
                 if event.type == pygame.QUIT: 
                     game_over = True 
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if not pause and pauseButtonPos[0] <= mouse[0] <= pauseButtonPos[0]+pauseButtonSize[0] and pauseButtonPos[1] <= mouse[1] <= pauseButtonPos[1]+pauseButtonSize[1]:
+                        pause = True
+                        pauseButtonText = "UNPAUSE"
+                    elif pause and pauseButtonPos[0] <= mouse[0] <= pauseButtonPos[0]+pauseButtonSize[0] and pauseButtonPos[1] <= mouse[1] <= pauseButtonPos[1]+pauseButtonSize[1]:
+                        pause = False
+                        pauseButtonText = "PAUSE"
+                    if quitButtonPos[0] <= mouse[0] <= quitButtonPos[0]+quitButtonSize[0] and quitButtonPos[1] <= mouse[1] <= quitButtonPos[1]+quitButtonSize[1]:
+                        pygame.quit()
 
                 keys = pygame.key.get_pressed()
                 for key in keys:
                     if keys[pygame.K_LEFT]:
                         #print("Left")
-                        dirx = "L"
+                        if not pause:
+                            dirx = "L"
                     elif keys[pygame.K_RIGHT]:
                         #print("Right")
-                        dirx = "R"
+                        if not pause:
+                            dirx = "R"
                     elif keys[pygame.K_UP]:
                         #print("Right")
-                        dirx = "U"
+                        if not pause:
+                            dirx = "U"
                     elif keys[pygame.K_DOWN]:
                         #print("Down")
-                        dirx = "D"
+                        if not pause:
+                            dirx = "D"
+
 
             # Move the block in the direction dirx
-            move(window, dirx)
-            dirx = ""
+            if not pause:
+                move(window, dirx)
+                dirx = ""
 
             # Prevent any shapes that have hit the bottom of the board from moving
             freezeShapes(window, board)
 
-            # Clear the screen and set the screen background
-            window.fill(bg_color)
+            # UI Layout
+            window.fill(bg_color) # Clear the screen and set the screen background
+            pygame.draw.rect(window,(45,45,45),[43,241,361,410])
+            pygame.draw.rect(window,(36,36,36),[70,300,308,150])
+            upcomingShapeText = defaultText.render("UPCOMING SHAPE", True, (255,255,255))
+            window.blit(upcomingShapeText, (76, 256))
 
             # Print the board state in console
             print(board)
@@ -823,22 +867,40 @@ def JoelMode():
 
             # Block falls downward one unit every tick
             if (difficulty - not_run >= 0):
-                fall(window, board)
-                not_run = 10
+                if not pause:
+                    fall(window, board)
+                    not_run = 10
             else:
                 not_run = not_run - 1
 
-        # Draw crosshatched pattern on window
+            # Draw crosshatched pattern on window
             draw_grid(window)
-        
+
+            if pause:
+                pausedText = pausedTextFont.render("PAUSED", True, (255,255,255))
+                window.blit(pausedText,(498, 328))
+
             # Draw game logo
             window.blit(image, (24, 34))
+
+            # Pause Button
+            pygame.draw.rect(window,(36,36,36),[pauseButtonPos[0],pauseButtonPos[1],pauseButtonSize[0],pauseButtonSize[1]])
+            pauseText = pauseTextFont.render(pauseButtonText, True, (255,255,255))
+            if not pause:
+                window.blit(pauseText,(pauseButtonPos[0]+30, pauseButtonPos[1]+14))
+            else:
+                window.blit(pauseText,(pauseButtonPos[0]+10, pauseButtonPos[1]+14))
+        
+            # Quit Button
+            pygame.draw.rect(window,(36,36,36),[quitButtonPos[0],quitButtonPos[1],quitButtonSize[0],quitButtonSize[1]])
+            quitText = pauseTextFont.render(quitButtonText, True, (255,255,255))
+            window.blit(quitText,(quitButtonPos[0]+40, quitButtonPos[1]+14))
         
             # Draw score and score text on window
-            scoreText = myfont.render(f"Score: {score}", True, (255,255,255))
-            lineText = myfont.render(f"Level: {difficulty}", True, (255,255,255))
-            window.blit(scoreText, (30, 300))
-            window.blit(lineText, (30, 350))
+            scoreText = defaultText.render(f"SCORE: {score}", True, (255,255,255))
+            lineText = defaultText.render(f"LEVEL: {difficulty}", True, (255,255,255))
+            window.blit(scoreText, (70, 470))
+            window.blit(lineText, (70, 470+50))
         
             pygame.display.update()
 
