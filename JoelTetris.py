@@ -261,18 +261,19 @@ def rotateJoelMode(board):
     empty_columns = 0
     empty = False
     current_color = 0
-
+    num_cells = 0
     # get coordinates of the unique shapes in the board
     for i in range(board.shape[0]):
         for j in range(board.shape[1]):
             if(board[i][j] >= 8 and board[i][j] <= 11):
+                num_cells+=1
                 current_color = board[i][j]
                 coords.append(i)
                 coords.append(j)
                 pairs.append(list(coords))
                 coords.pop()
                 coords.pop()
-                
+    print("NUM CELLS: " + str(num_cells))
 
     # get the x values from the coordinates
     for i in pairs:
@@ -299,7 +300,7 @@ def rotateJoelMode(board):
         pairs[i][1] -= minimum_y
 
     # fill in the 1's
-    for i in range(6):
+    for i in range(num_cells):
         empty_shape[pairs[i][0]][pairs[i][1]] = current_color
     
 
