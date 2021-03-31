@@ -162,7 +162,6 @@ def rotate(board):
 
     pairs.clear()
 
-    #print("Original shape: \n" + str(empty_shape))
     # rotate the recreated shape array
     rotated_shape = np.rot90(empty_shape)
 
@@ -210,7 +209,6 @@ def rotate(board):
         for j in range(board.shape[1]):
             if(board[i][j] == current_color):
                 board[i][j] = 0
-    #print("Rotated Shape: \n" + str(rotated_shape))
 
     empty_columns = 0
     empty_rows = 0
@@ -230,8 +228,6 @@ def rotate(board):
                 if(rotated_shape[i][j] >= 1 and rotated_shape[i][j] <= 7 or rotated_shape[i][j] >= 12 and rotated_shape[i][j] <= 18):
                     rotated_shape[i-(empty_columns)][j] = current_color
                     rotated_shape[i][j] = 0
-
-        #print("Rotated and Shifted Shape: \n" + str(rotated_shape))
     
     # Draw the rotated shape back to the game board at its original position
     for i in range(empty_shape.shape[0]):
@@ -273,7 +269,6 @@ def rotateJoelMode(board):
                 pairs.append(list(coords))
                 coords.pop()
                 coords.pop()
-    print("NUM CELLS: " + str(num_cells))
 
     # get the x values from the coordinates
     for i in pairs:
@@ -306,7 +301,6 @@ def rotateJoelMode(board):
 
     pairs.clear()
 
-    #print("Original shape: \n" + str(empty_shape))
     # rotate the recreated shape array
     rotated_shape = np.rot90(empty_shape)
 
@@ -354,7 +348,6 @@ def rotateJoelMode(board):
         for j in range(board.shape[1]):
             if(board[i][j] == current_color):
                 board[i][j] = 0
-    #print("Rotated Shape: \n" + str(rotated_shape))
 
     empty_columns = 0
     empty_rows = 0
@@ -375,8 +368,6 @@ def rotateJoelMode(board):
                     rotated_shape[i-(empty_columns)][j] = current_color
                     rotated_shape[i][j] = 0
 
-        #print("Rotated and Shifted Shape: \n" + str(rotated_shape))
-    
     # Draw the rotated shape back to the game board at its original position
     for i in range(empty_shape.shape[0]):
         for j in range(empty_shape.shape[1]):
@@ -415,15 +406,9 @@ def placeStartingShape(window, board):
 def placeStartingShapeJoelMode(window, board):
     shape_number = generateShapeIndexJoelMode()
     next_sn = generateShapeIndexJoelMode()
-    print("Shape_Num")
-    print(shape_number)
-    print("next_sn")
-    print(next_sn)
 
     # Change this index to change shape
     shape = JoelShapes[shape_number]
-    print("Shape")
-    print(shape)
     
     for i in range(shape.shape[0]):
         for j in range(shape.shape[1]):
@@ -435,7 +420,6 @@ def spawnShape(window, board):
     global next_sn
     active = False
     shape_number = next_sn
-    #print(shape_number)
     shape = Shapes[shape_number]
     for i in range(board.shape[0]):
         for j in range(board.shape[1]):
@@ -466,7 +450,6 @@ def spawnShapeJoelMode(window, board):
     global next_sn
     active = False
     shape_number = next_sn
-    print(shape_number)
     shape = JoelShapes[shape_number]
     for i in range(board.shape[0]):
         for j in range(board.shape[1]):
@@ -547,18 +530,13 @@ def drawNextShape(window, board):
 def drawNextShapeJoelMode(window, board):
     start_x = -1
     start_y = -1
-    print(next_sn)
     shape = JoelShapes[next_sn]
-    print("next shape")
-    print(shape)
     for i in range(shape.shape[0]):
         for j in range(shape.shape[1]):
             if(shape[i][j] >= 8 and shape[i][j] <= 11):
                 if(start_x == -1):
                     start_x = i
                     start_y = j
-                print("ns")
-                print(int(shape[i][j]) - 8)
                 ns = int(shape[i][j]) - 8
                 if ns == 0:
                     pygame.draw.rect(window, joelmode_colors[ns], ((6+j-start_y) * square_size, (9+i-start_x) * square_size+margin+10, square_size, square_size)) 
@@ -642,7 +620,6 @@ def fall(window, board):
         for i in range(4):
             # set new pairs to 1
             board[new_pairs[i][0]][new_pairs[i][1]] = curr_shape #Problem lies here for colors
-    #print(new_pairs)
     new_coords.clear()
     new_pairs.clear()
 
@@ -702,7 +679,6 @@ def fallJoelMode(window, board):
         for i in range(10):
             # set new pairs to 1
             board[new_pairs[i][0]][new_pairs[i][1]] = curr_shape #Problem lies here for colors
-    #print(new_pairs)
     new_coords.clear()
     new_pairs.clear()
 
@@ -878,7 +854,6 @@ def move(window, dir):
                 coords.pop()
                 coords.pop()
 
-    #print(pairs)
     new_pairs = []
     new_coords = []
     curr_shape = -1
@@ -953,7 +928,6 @@ def moveJoelMode(window, dir):
                 coords.pop()
                 coords.pop()
 
-    #print(pairs)
     new_pairs = []
     new_coords = []
     curr_shape = -1
@@ -1082,19 +1056,15 @@ def JoelBlockGame():
                 keys = pygame.key.get_pressed()
                 for key in keys:
                     if keys[pygame.K_LEFT]:
-                        #print("Left")
                         if not pause:
                             dirx = "L"
                     elif keys[pygame.K_RIGHT]:
-                        #print("Right")
                         if not pause:
                             dirx = "R"
                     elif keys[pygame.K_UP]:
-                        #print("Right")
                         if not pause:
                             dirx = "U"
                     elif keys[pygame.K_DOWN]:
-                        #print("Down")
                         if not pause:
                             dirx = "D"
 
@@ -1113,9 +1083,6 @@ def JoelBlockGame():
             pygame.draw.rect(window,(36,36,36),[70,300,308,150])
             upcomingShapeText = defaultText.render("UPCOMING SHAPE", True, (255,255,255))
             window.blit(upcomingShapeText, (76, 256))
-
-            # Print the board state in console
-            print(board)
 
             # Draw frozen shapes to the screen
             drawFrozenShapes(window, board)
@@ -1283,19 +1250,15 @@ def JoelMode():
                 keys = pygame.key.get_pressed()
                 for key in keys:
                     if keys[pygame.K_LEFT]:
-                        #print("Left")
                         if not pause:
                             dirx = "L"
                     elif keys[pygame.K_RIGHT]:
-                        #print("Right")
                         if not pause:
                             dirx = "R"
                     elif keys[pygame.K_UP]:
-                        #print("Right")
                         if not pause:
                             dirx = "U"
                     elif keys[pygame.K_DOWN]:
-                        #print("Down")
                         if not pause:
                             dirx = "D"
 
@@ -1314,9 +1277,6 @@ def JoelMode():
             pygame.draw.rect(window,(36,36,36),[70,300,308,150])
             upcomingShapeText = defaultText.render("UPCOMING SHAPE", True, (255,255,255))
             window.blit(upcomingShapeText, (76, 256))
-
-            # Print the board state in console
-            #print(board)
 
             # Draw frozen shapes to the screen
             drawFrozenShapesJoelMode(window, board)
