@@ -1200,6 +1200,9 @@ def JoelMode():
     replay = ""
     play_on = True
     
+    global next_sn
+    next_sn = random.randrange(4)
+    
     # Initialization stuff
     score = 0
     difficulty = 0
