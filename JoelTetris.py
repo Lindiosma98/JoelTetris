@@ -558,7 +558,7 @@ def drawNextShapeJoelMode(window, board):
                 print("ns")
                 print(int(shape[i][j]) - 8)
                 ns = int(shape[i][j]) - 8
-                pygame.draw.rect(window, joelmode_colors[ns], ((10+j-start_y) * square_size, (10+i-start_x) * square_size+margin, square_size, square_size)) 
+                pygame.draw.rect(window, joelmode_colors[ns], ((6+j-start_y) * square_size, (9+i-start_x) * square_size+margin, square_size, square_size)) 
                 #pygame.draw.rect(window, colors[ns], (j*square_size+450, i*square_size+margin, square_size, square_size))
 
 # Draws all frozen shapes (2) to the board
@@ -1290,7 +1290,7 @@ def JoelMode():
 
             # Move the block in the direction dirx
             if not pause:
-                move(window, dirx)
+                moveJoelMode(window, dirx)
                 dirx = ""
 
             # Prevent any shapes that have hit the bottom of the board from moving
@@ -1353,7 +1353,7 @@ def JoelMode():
             # Block falls downward one unit every tick
             if (difficulty - not_run >= 0):
                 if not pause:
-                    fall(window, board)
+                    fallJoelMode(window, board)
                     not_run = 10
             else:
                 not_run = not_run - 1
