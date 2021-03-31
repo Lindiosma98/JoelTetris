@@ -466,7 +466,7 @@ def spawnShapeJoelMode(window, board):
     global next_sn
     active = False
     shape_number = next_sn
-    #print(shape_number)
+    print(shape_number)
     shape = JoelShapes[shape_number]
     for i in range(board.shape[0]):
         for j in range(board.shape[1]):
@@ -1062,7 +1062,6 @@ def JoelBlockGame():
                         pause = False
                         pauseButtonText = "PAUSE"
                     if quitButtonPos[0] <= mouse[0] <= quitButtonPos[0]+quitButtonSize[0] and quitButtonPos[1] <= mouse[1] <= quitButtonPos[1]+quitButtonSize[1]:
-                        pygame.quit()
                         main()
 
                 keys = pygame.key.get_pressed()
@@ -1187,20 +1186,9 @@ def JoelBlockGame():
             pygame.display.update()
 
         pygame.quit()
-
-        replay = input("Replay Joel Block Game? (y/n) ")
-        replay = replay.lower()
-        while replay != "y" and replay != "n":
-            print("Incorrect input")
-            replay = input("Replay Joel Block Game? (y/n) ")
-
-        if replay == "y":
-            JoelBlockGame()
-        elif replay == "n":
-            main()
              
 def JoelMode():
-
+    pygame.time.wait(50)
     replay = ""
     play_on = True
     
@@ -1209,11 +1197,10 @@ def JoelMode():
     difficulty = 0
     not_run = 10
     window = pygame.display.set_mode((width, height))
-    pygame.display.set_caption("Joel Block Game")
-    image = pygame.image.load("logo.png")
     gameIcon = pygame.image.load('icon.png')
     pygame.display.set_icon(gameIcon)
     pygame.font.init()
+    image = pygame.image.load("logo.png")
     defaultText = pygame.font.Font("comfortaa_regular.ttf", 30)
     pausedTextFont = pygame.font.Font("comfortaa_regular.ttf", 48)
 
@@ -1265,7 +1252,6 @@ def JoelMode():
                         pause = False
                         pauseButtonText = "PAUSE"
                     if quitButtonPos[0] <= mouse[0] <= quitButtonPos[0]+quitButtonSize[0] and quitButtonPos[1] <= mouse[1] <= quitButtonPos[1]+quitButtonSize[1]:
-                        pygame.quit()
                         main()
 
                 keys = pygame.key.get_pressed()
@@ -1297,7 +1283,7 @@ def JoelMode():
             freezeShapesJoelMode(window, board)
 
             # UI Layout
-            window.fill(bg_color) # Clear the screen and set the screen background
+            window.fill(bg_color) # Clear the screen
             pygame.draw.rect(window,(45,45,45),[43,241,361,410])
             pygame.draw.rect(window,(36,36,36),[70,300,308,150])
             upcomingShapeText = defaultText.render("UPCOMING SHAPE", True, (255,255,255))
@@ -1389,43 +1375,75 @@ def JoelMode():
         
             pygame.display.update()
 
-        pygame.quit()
-
-        replay = input("Replay Joel Block Game? (y/n) ")
-        replay = replay.lower()
-        while replay != "y" and replay != "n":
-            print("Incorrect input")
-            replay = input("Replay Joel Block Game? (y/n) ")
-
-        if replay == "y":
-            JoelMode()
-        elif replay == "n":
-            main()
-
 def main():
+    pygame.time.wait(50)
     replay = ""
     play_on = True
+    
+    window = pygame.display.set_mode((width, height))
+    gameIcon = pygame.image.load('icon.png')
+    pygame.display.set_icon(gameIcon)
+    pygame.font.init()
+    clock = pygame.time.Clock()
+
+    image = pygame.image.load("logo.png")
+
+    buttonY = 350
+
+    jbgTextFont = pygame.font.Font("comfortaa_regular.ttf", 30)
+    jbgButtonPos = [255, buttonY]
+    jbgButtonSize = [280, 55]
+
+    jmTextFont = pygame.font.Font("comfortaa_regular.ttf", 30)
+    jmButtonPos = [255, buttonY+80]
+    jmButtonSize = [280, 55]
+
+    quitTextFont = pygame.font.Font("comfortaa_regular.ttf", 24)
+    quitButtonPos = [255, buttonY+160]
+    quitButtonSize = [280, 55]
 
     while play_on:
-        print ("""
-        1. Joel Block Game
-        2. Joel Mode
-        3. Exit Game
-        """)
+        pygame.time.delay(75)
+        # One hundred ticks per second
+        clock.tick(100)
 
-        choice = int(input("Pick menu option of your choosing: "))
+        mouse = pygame.mouse.get_pos()
 
-        while choice < 1 or choice > 3:
-            print("No such option, try again")
-            choice = int(input("Pick menu option of your choosing: "))
+        # Event handling (user input)
+        pygame.key.set_repeat(1, 10) 
+        for event in pygame.event.get(): 
+            if event.type == pygame.QUIT:
+                play_on = False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if jbgButtonPos[0] <= mouse[0] <= jbgButtonPos[0]+jbgButtonSize[0] and jbgButtonPos[1] <= mouse[1] <= jbgButtonPos[1]+jbgButtonSize[1]:
+                    JoelBlockGame()
+                if jmButtonPos[0] <= mouse[0] <= jmButtonPos[0]+jmButtonSize[0] and jmButtonPos[1] <= mouse[1] <= jmButtonPos[1]+jmButtonSize[1]:
+                    JoelMode()
+                if quitButtonPos[0] <= mouse[0] <= quitButtonPos[0]+quitButtonSize[0] and quitButtonPos[1] <= mouse[1] <= quitButtonPos[1]+quitButtonSize[1]:
+                    pygame.quit()
+                    quit()
 
-        if choice == 1:
-            JoelBlockGame()
-        elif choice == 2:
-            JoelMode()
-        elif choice == 3:
-            print("Thanks for playing this ballin game")
-            quit()
+        window.fill(bg_color)
+
+        # Draw logo
+        window.blit(image, (192, 124))
+
+        # Joel Block Game Button
+        pygame.draw.rect(window,(69,69,69),[jbgButtonPos[0],jbgButtonPos[1],jbgButtonSize[0],jbgButtonSize[1]])
+        jbgButtonText = jbgTextFont.render("CLASSIC MODE", True, (255,255,255))
+        window.blit(jbgButtonText,(jbgButtonPos[0]+18, jbgButtonPos[1]+12))
+
+        # Joel Mode Button
+        pygame.draw.rect(window,(69,69,69),[jmButtonPos[0],jmButtonPos[1],jmButtonSize[0],jmButtonSize[1]])
+        jmButtonText = jmTextFont.render("JOEL MODE", True, (255,255,255))
+        window.blit(jmButtonText,(jmButtonPos[0]+42, jmButtonPos[1]+12))
+
+        # Quit Button
+        pygame.draw.rect(window,(69,69,69),[quitButtonPos[0],quitButtonPos[1],quitButtonSize[0],quitButtonSize[1]])
+        quitText = jbgTextFont.render("QUIT", True, (255,255,255))
+        window.blit(quitText,(quitButtonPos[0]+98, quitButtonPos[1]+12))
+
+        pygame.display.update()
    
     pygame.quit()
 
