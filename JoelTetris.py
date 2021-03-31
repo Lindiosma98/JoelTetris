@@ -1052,9 +1052,11 @@ def JoelBlockGame():
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if not pause and pauseButtonPos[0] <= mouse[0] <= pauseButtonPos[0]+pauseButtonSize[0] and pauseButtonPos[1] <= mouse[1] <= pauseButtonPos[1]+pauseButtonSize[1]:
                         pause = True
+                        pygame.mixer.Channel(0).pause()
                         pauseButtonText = "UNPAUSE"
                     elif pause and pauseButtonPos[0] <= mouse[0] <= pauseButtonPos[0]+pauseButtonSize[0] and pauseButtonPos[1] <= mouse[1] <= pauseButtonPos[1]+pauseButtonSize[1]:
                         pause = False
+                        pygame.mixer.Channel(0).unpause()
                         pauseButtonText = "PAUSE"
                     if quitButtonPos[0] <= mouse[0] <= quitButtonPos[0]+quitButtonSize[0] and quitButtonPos[1] <= mouse[1] <= quitButtonPos[1]+quitButtonSize[1]:
                         pygame.mixer.Channel(0).stop()
@@ -1244,9 +1246,11 @@ def JoelMode():
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if not pause and pauseButtonPos[0] <= mouse[0] <= pauseButtonPos[0]+pauseButtonSize[0] and pauseButtonPos[1] <= mouse[1] <= pauseButtonPos[1]+pauseButtonSize[1]:
                         pause = True
+                        pygame.mixer.Channel(0).pause()
                         pauseButtonText = "UNPAUSE"
                     elif pause and pauseButtonPos[0] <= mouse[0] <= pauseButtonPos[0]+pauseButtonSize[0] and pauseButtonPos[1] <= mouse[1] <= pauseButtonPos[1]+pauseButtonSize[1]:
                         pause = False
+                        pygame.mixer.Channel(0).unpause()
                         pauseButtonText = "PAUSE"
                     if quitButtonPos[0] <= mouse[0] <= quitButtonPos[0]+quitButtonSize[0] and quitButtonPos[1] <= mouse[1] <= quitButtonPos[1]+quitButtonSize[1]:
                         pygame.mixer.Channel(0).stop()
