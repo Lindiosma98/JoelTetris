@@ -1290,7 +1290,7 @@ def JoelMode():
 
             # Move the block in the direction dirx
             if not pause:
-                move(window, dirx)
+                moveJoelMode(window, dirx)
                 dirx = ""
 
             # Prevent any shapes that have hit the bottom of the board from moving
@@ -1353,7 +1353,7 @@ def JoelMode():
             # Block falls downward one unit every tick
             if (difficulty - not_run >= 0):
                 if not pause:
-                    fall(window, board)
+                    fallJoelMode(window, board)
                     not_run = 10
             else:
                 not_run = not_run - 1
