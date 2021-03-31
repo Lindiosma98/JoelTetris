@@ -1194,12 +1194,13 @@ def JoelBlockGame():
             pygame.display.update()
 
         pygame.quit()
+        main()
              
 def JoelMode():
     pygame.time.wait(50)
     replay = ""
     play_on = True
-    
+
     global next_sn
     next_sn = random.randrange(4)
     
@@ -1385,9 +1386,10 @@ def JoelMode():
             window.blit(lineText, (70, 470+50))
         
             pygame.display.update()
+        pygame.quit()
+        main()
 
 def main():
-    pygame.time.wait(50)
     replay = ""
     play_on = True
     
