@@ -1420,6 +1420,11 @@ def main():
             choice = int(input("Pick menu option of your choosing: "))
 
         if choice == 1:
+            music = 'Pendulum - Propane Nightmares.mp3'
+            pygame.init()
+            pygame.mixer.init()
+            pygame.mixer.music.load(music)
+            pygame.mixer.music.play(-1)
             JoelBlockGame()
         elif choice == 2:
             JoelMode()
