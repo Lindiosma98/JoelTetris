@@ -34,6 +34,10 @@ next_sc = -1
 
 board = np.zeros((rows, cols))
 
+pygame.mixer.init()
+pygame.mixer.set_num_channels(2)
+
+
 # Numpy arrays for shapes. 4x4. Column-major.
 T = np.array([
     (0,1,0,0),
@@ -732,6 +736,8 @@ def clearRow(cleared_rows):
                 rowFull = False
         if rowFull:
             cleared_rows = cleared_rows + 1
+            pygame.mixer.Channel(1).set_volume(0.4)
+            pygame.mixer.Channel(1).play(pygame.mixer.Sound('yeah.mp3'))
             for k in range(rows):
                 for l in range(cols):
                     if k + 1 < i:
@@ -748,6 +754,9 @@ def clearRowJoelMode(cleared_rows):
                 rowFull = False
         if rowFull:
             cleared_rows = cleared_rows + 1
+            cleared_rows = cleared_rows + 1
+            pygame.mixer.Channel(1).set_volume(0.4)
+            pygame.mixer.Channel(1).play(pygame.mixer.Sound('yeah.mp3'))
             for k in range(rows):
                 for l in range(cols):
                     if k + 1 < i:
@@ -996,11 +1005,9 @@ def JoelBlockGame():
     defaultText = pygame.font.Font("comfortaa_regular.ttf", 30)
     pausedTextFont = pygame.font.Font("comfortaa_regular.ttf", 48)
 
-    music = 'classic.mp3'
     pygame.mixer.init()
-    pygame.mixer.music.load(music)
-    pygame.mixer.music.set_volume(0.2)
-    pygame.mixer.music.play(-1)
+    pygame.mixer.Channel(0).set_volume(0.1)
+    pygame.mixer.Channel(0).play(pygame.mixer.Sound('classic.mp3'),-1)
 
     pause = False
 
@@ -1050,7 +1057,7 @@ def JoelBlockGame():
                         pause = False
                         pauseButtonText = "PAUSE"
                     if quitButtonPos[0] <= mouse[0] <= quitButtonPos[0]+quitButtonSize[0] and quitButtonPos[1] <= mouse[1] <= quitButtonPos[1]+quitButtonSize[1]:
-                        pygame.mixer.music.stop()
+                        pygame.mixer.Channel(0).stop()
                         main()
 
                 keys = pygame.key.get_pressed()
@@ -1166,7 +1173,7 @@ def JoelBlockGame():
             window.blit(lineText, (70, 470+50))
         
             pygame.display.update()
-        pygame.mixer.music.stop()
+        pygame.mixer.Channel(0).stop()
         pygame.quit()
         main()
              
@@ -1190,11 +1197,9 @@ def JoelMode():
     defaultText = pygame.font.Font("comfortaa_regular.ttf", 30)
     pausedTextFont = pygame.font.Font("comfortaa_regular.ttf", 48)
 
-    music = 'joelmode.mp3'
     pygame.mixer.init()
-    pygame.mixer.music.load(music)
-    pygame.mixer.music.set_volume(0.15)
-    pygame.mixer.music.play(-1)
+    pygame.mixer.Channel(0).set_volume(0.1)
+    pygame.mixer.Channel(0).play(pygame.mixer.Sound('joelmode.mp3'),-1)
 
     pause = False
 
@@ -1244,7 +1249,7 @@ def JoelMode():
                         pause = False
                         pauseButtonText = "PAUSE"
                     if quitButtonPos[0] <= mouse[0] <= quitButtonPos[0]+quitButtonSize[0] and quitButtonPos[1] <= mouse[1] <= quitButtonPos[1]+quitButtonSize[1]:
-                        pygame.mixer.music.stop()
+                        pygame.mixer.Channel(0).stop()
                         main()
 
                 keys = pygame.key.get_pressed()
@@ -1360,7 +1365,7 @@ def JoelMode():
             window.blit(lineText, (70, 470+50))
         
             pygame.display.update()
-        pygame.mixer.music.stop()
+        pygame.mixer.Channel(0).stop()
         pygame.quit()
         main()
 
@@ -1369,16 +1374,15 @@ def main():
     play_on = True
     
     window = pygame.display.set_mode((width, height))
+    pygame.display.set_caption("Joel Block Game")
     gameIcon = pygame.image.load('icon.png')
     pygame.display.set_icon(gameIcon)
     pygame.font.init()
     clock = pygame.time.Clock()
 
-    music = 'menu.mp3'
     pygame.mixer.init()
-    pygame.mixer.music.load(music)
-    pygame.mixer.music.set_volume(0.1)
-    pygame.mixer.music.play(-1)
+    pygame.mixer.Channel(0).set_volume(0.1)
+    pygame.mixer.Channel(0).play(pygame.mixer.Sound('menu.mp3'),-1)
 
     image = pygame.image.load("logo.png")
 
@@ -1410,13 +1414,13 @@ def main():
                 play_on = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if jbgButtonPos[0] <= mouse[0] <= jbgButtonPos[0]+jbgButtonSize[0] and jbgButtonPos[1] <= mouse[1] <= jbgButtonPos[1]+jbgButtonSize[1]:
-                    pygame.mixer.music.stop()
+                    pygame.mixer.Channel(0).stop()
                     JoelBlockGame()
                 if jmButtonPos[0] <= mouse[0] <= jmButtonPos[0]+jmButtonSize[0] and jmButtonPos[1] <= mouse[1] <= jmButtonPos[1]+jmButtonSize[1]:
-                    pygame.mixer.music.stop()
+                    pygame.mixer.Channel(0).stop()
                     JoelMode()
                 if quitButtonPos[0] <= mouse[0] <= quitButtonPos[0]+quitButtonSize[0] and quitButtonPos[1] <= mouse[1] <= quitButtonPos[1]+quitButtonSize[1]:
-                    pygame.mixer.music.stop()
+                    pygame.mixer.Channel(0).stop()
                     pygame.quit()
                     quit()
 
