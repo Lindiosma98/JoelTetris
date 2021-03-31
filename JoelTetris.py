@@ -528,19 +528,21 @@ def drawNextShape(window, board):
                 if(start_x == -1):
                     start_x = i
                     start_y = j
-                #print(int(shape[i][j]) - 1)
                 ns = int(shape[i][j]) - 1
-                if ns == 1:
-                    pygame.draw.rect(window, colors[ns], ((6+j-start_y) * square_size, (10+i-start_x) * square_size+margin, square_size, square_size)) 
-                elif ns == 6 or ns == 5 or ns == 4:
-                    pygame.draw.rect(window, colors[ns], ((7+j-start_y) * square_size, (9+i-start_x) * square_size+margin, square_size, square_size)) 
+                if ns == 0:
+                    pygame.draw.rect(window, colors[ns], ((7+j-start_y) * square_size+16, (9+i-start_x) * square_size+margin+8, square_size, square_size))
+                elif ns == 1:
+                    pygame.draw.rect(window, colors[ns], ((6+j-start_y) * square_size+18, (10+i-start_x) * square_size+margin-6, square_size, square_size)) 
                 elif ns == 2:
-                    pygame.draw.rect(window, colors[ns], ((8+j-start_y) * square_size, (10+i-start_x) * square_size+margin, square_size, square_size))
+                    pygame.draw.rect(window, colors[ns], ((8+j-start_y) * square_size, (10+i-start_x) * square_size+margin-4, square_size, square_size))
                 elif ns == 3:
-                    pygame.draw.rect(window, colors[ns], ((6+j-start_y) * square_size, (10+i-start_x) * square_size+margin, square_size, square_size))
-                else:
-                    pygame.draw.rect(window, colors[ns], ((7+j-start_y) * square_size, (9+i-start_x) * square_size+margin, square_size, square_size))
-                #pygame.draw.rect(window, colors[ns], (j*square_size+450, i*square_size+margin, square_size, square_size))
+                    pygame.draw.rect(window, colors[ns], ((6+j-start_y) * square_size, (10+i-start_x) * square_size+margin-4, square_size, square_size))
+                elif ns == 4:
+                    pygame.draw.rect(window, colors[ns], ((7+j-start_y) * square_size-12, (9+i-start_x) * square_size+margin+8, square_size, square_size)) 
+                elif ns == 5:
+                    pygame.draw.rect(window, colors[ns], ((7+j-start_y) * square_size+16, (9+i-start_x) * square_size+margin+8, square_size, square_size)) 
+                elif ns == 6:
+                    pygame.draw.rect(window, colors[ns], ((7+j-start_y) * square_size, (9+i-start_x) * square_size+margin-5, square_size, square_size))
 
 def drawNextShapeJoelMode(window, board):
     start_x = -1
@@ -558,8 +560,14 @@ def drawNextShapeJoelMode(window, board):
                 print("ns")
                 print(int(shape[i][j]) - 8)
                 ns = int(shape[i][j]) - 8
-                pygame.draw.rect(window, joelmode_colors[ns], ((6+j-start_y) * square_size, (9+i-start_x) * square_size+margin, square_size, square_size)) 
-                #pygame.draw.rect(window, colors[ns], (j*square_size+450, i*square_size+margin, square_size, square_size))
+                if ns == 0:
+                    pygame.draw.rect(window, joelmode_colors[ns], ((6+j-start_y) * square_size, (9+i-start_x) * square_size+margin+10, square_size, square_size)) 
+                elif ns == 1:
+                    pygame.draw.rect(window, joelmode_colors[ns], ((6+j-start_y) * square_size, (9+i-start_x) * square_size+margin+10, square_size, square_size)) 
+                elif ns == 2:
+                    pygame.draw.rect(window, joelmode_colors[ns], ((6+j-start_y) * square_size, (9+i-start_x) * square_size+margin-6, square_size, square_size)) 
+                elif ns == 3:
+                    pygame.draw.rect(window, joelmode_colors[ns], ((6+j-start_y) * square_size, (9+i-start_x) * square_size+margin-6, square_size, square_size)) 
 
 # Draws all frozen shapes (2) to the board
 def drawFrozenShapes(window, board):
